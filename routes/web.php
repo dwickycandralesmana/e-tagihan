@@ -18,6 +18,8 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::post('tagihan', [DashboardController::class, 'tagihan_import'])->name('tagihan.import');
+    Route::get('tagihan/{id}/show', [DashboardController::class, 'tagihan_show'])->name('tagihan.show');
+    Route::get('tagihan/pdf', [DashboardController::class, 'tagihan_pdf'])->name('tagihan.pdf');
     Route::get('tagihan/data', [DashboardController::class, 'tagihan_data'])->name('tagihan.data');
     Route::get('tagihan', [DashboardController::class, 'tagihan'])->name('tagihan.index');
 

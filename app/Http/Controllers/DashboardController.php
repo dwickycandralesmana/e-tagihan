@@ -48,8 +48,8 @@ class DashboardController extends BaseController
                 $html = "";
 
                 if (auth()->user()) {
-                    $html .= "<a href='" . route('jenjang.edit', $row->id) . "' class='btn btn-warning me-1 mb-1'><i class='fas fa-edit'></i> Edit</a>";
-                    $html .= "<a href='" . route('jenjang.export', $row->id) . "' class='btn btn-success me-1 mb-1'><i class='fas fa-file-excel'></i> Download Template</a>";
+                    $html .= "<a href='" . route('tagihan.show', $row->id) . "' class='btn btn-primary me-1 mb-1'><i class='fas fa-eye'></i> Detail</a>";
+                    $html .= "<a href='" . route('tagihan.pdf', $row->id) . "' class='btn btn-success me-1 mb-1'><i class='fas fa-file-pdf'></i> Download Kartu Kendali</a>";
                 }
 
                 return $html;
@@ -82,5 +82,12 @@ class DashboardController extends BaseController
         );
 
         return redirect()->route('tagihan.index')->with($notification);
+    }
+
+    public function tagihan_show($id)
+    {
+        $this->tagihan = Tagihan::findOrFail($id);
+
+        return view('admin.tagihan.show', $this->data);
     }
 }
