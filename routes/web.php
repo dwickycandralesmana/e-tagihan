@@ -7,6 +7,7 @@ use App\Http\Controllers\FormController;
 use App\Http\Controllers\JenjangController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsUser;
@@ -17,11 +18,14 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::post('tagihan', [DashboardController::class, 'tagihan_import'])->name('tagihan.import');
-    Route::get('tagihan/{id}/show', [DashboardController::class, 'tagihan_show'])->name('tagihan.show');
-    Route::get('tagihan/pdf', [DashboardController::class, 'tagihan_pdf'])->name('tagihan.pdf');
-    Route::get('tagihan/data', [DashboardController::class, 'tagihan_data'])->name('tagihan.data');
-    Route::get('tagihan', [DashboardController::class, 'tagihan'])->name('tagihan.index');
+    // Route::delete('tagihan/{id}/destroy', [TagihanController::class, 'destroy'])->name('tagihan.destroy');
+    // Route::get('tagihan/{id}/show', [TagihanController::class, 'show'])->name('tagihan.show');
+    // Route::get('tagihan', [TagihanController::class, 'tagihan'])->name('tagihan.index');
+
+    Route::post('tagihan/import', [TagihanController::class, 'import'])->name('tagihan.import');
+    Route::get('tagihan/{id}/pdf', [TagihanController::class, 'pdf'])->name('tagihan.pdf');
+    Route::get('tagihan/data', [TagihanController::class, 'data'])->name('tagihan.data');
+    Route::resource('tagihan', TagihanController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

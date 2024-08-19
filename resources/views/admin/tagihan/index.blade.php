@@ -126,7 +126,7 @@ Tagihan
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.value) {
-                    let url = '{{ route('jenjang.destroy', ':id') }}';
+                    let url = '{{ route('tagihan.destroy', ':id') }}';
                         url = url.replace(':id', id);
 
                     $.ajax({
