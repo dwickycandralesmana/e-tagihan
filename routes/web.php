@@ -14,6 +14,7 @@ use App\Http\Middleware\IsUser;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('tagihan/{id}/pdf', [TagihanController::class, 'pdf'])->name('tagihan.pdf');
 
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -23,7 +24,6 @@ Route::middleware('auth')->group(function () {
     // Route::get('tagihan', [TagihanController::class, 'tagihan'])->name('tagihan.index');
 
     Route::post('tagihan/import', [TagihanController::class, 'import'])->name('tagihan.import');
-    Route::get('tagihan/{id}/pdf', [TagihanController::class, 'pdf'])->name('tagihan.pdf');
     Route::get('tagihan/data', [TagihanController::class, 'data'])->name('tagihan.data');
     Route::resource('tagihan', TagihanController::class);
 

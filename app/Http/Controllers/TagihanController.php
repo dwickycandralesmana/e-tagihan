@@ -44,7 +44,7 @@ class TagihanController extends BaseController
 
                 if (auth()->user()) {
                     $html .= "<a href='" . route('tagihan.show', $row->id) . "' class='btn btn-primary me-1 mb-1'><i class='fas fa-eye'></i> Detail</a>";
-                    $html .= "<a href='" . route('tagihan.pdf', $row->id) . "' class='btn btn-success me-1 mb-1'><i class='fas fa-file-pdf'></i> Download Kartu Kendali</a>";
+                    $html .= "<a href='" . route('tagihan.pdf', $row->id) . "' target='_blank' class='btn btn-success me-1 mb-1'><i class='fas fa-file-pdf'></i> Download Kartu Kendali</a>";
                     $html .= "<button class='btn btn-danger btn-delete mb-1 me-1' data-id='" . $row->id . "'><i class='fas fa-trash'></i> Hapus</button>";
                 }
 
@@ -91,10 +91,8 @@ class TagihanController extends BaseController
     {
         $tagihan = Tagihan::findOrFail($id);
         $pdf = Pdf::loadView('pdf.tagihan', compact('tagihan'));
-        return $pdf->stream();
 
-        $this->tagihan = $tagihan;
-        return view('pdf.tagihan', $this->data);
+        return $pdf->stream('Kartu Kendali - ' . $tagihan->nama . '.pdf');
     }
 
     public function destroy($id)
