@@ -86,4 +86,24 @@
             @endif
         </div>
     </div>
+
+    <footer class="footer footer-transparent d-print-none">
+        <div class="container">
+            <div class="row text-center align-items-center">
+                <div class="col-lg-12">
+                    <b>
+                        MENU CEPAT
+                    </b>
+                    <ul class="nav nav-footer align-items-center justify-content-center">
+                        <li class="nav-item">
+                            <a href="https://linktr.ee/adminpenda2" target="_blank" class="nav-link" target="_blank">Cek NIS Siswa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="https://linktr.ee/adminpenda2kra" target="_blank" class="nav-link" target="_blank">Rekapan Wali Kelas</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
 @endsection
