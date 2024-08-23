@@ -52,6 +52,24 @@
                     <h3>
                         RINCIAN KEKURANGAN KEUANGAN SISWA
                     </h3>
+                    <table>
+                        <tr>
+                            <td width="50">Nama</td>
+                            <td>:</td>
+                            <td>{{ $tagihan->nama }}</td>
+                        </tr>
+                        <tr>
+                            <td width="50">NIS</td>
+                            <td>:</td>
+                            <td>{{ $tagihan->nis }}</td>
+                        </tr>
+                        <tr>
+                            <td width="50">Kelas</td>
+                            <td>:</td>
+                            <td>{{ $tagihan->kelas }}</td>
+                        </tr>
+                    </table>
+                    <Br>
                     <table class="table table-striped table-bordered">
                         <thead>
                             <th>No</th>
@@ -74,16 +92,16 @@
                                     @endif
 
                                     @if($item['key'] == 'tunggakan' && json_decode($tagihan->column, true)[$key+1]['key'] == 'total_tunggakan')
-                                        <td class="text-nowrap">{{ $item['label'] }}</td>
+                                        <td class="">{{ $item['label'] }}</td>
                                         <td>{{ $item['value'] }}</td>
 
-                                        <td class="text-nowrap">{{ formatRp(json_decode($tagihan->column, true)[$key+1]['value']) }}</td>
+                                        <td class="">{{ formatRp(json_decode($tagihan->column, true)[$key+1]['value']) }}</td>
                                     @else
                                         @if($loop->last)
-                                            <td colspan="2" class="text-nowrap fw-bold text-center">{{ $item['label'] }}</td>
+                                            <td colspan="2" class="fw-bold text-center">{{ $item['label'] }}</td>
                                             <td class="text-nowrap fw-bold">{{ formatRp($item['value']) }}</td>
                                         @else
-                                            <td colspan="2" class="text-nowrap">{{ $item['label'] }}</td>
+                                            <td colspan="2" class="">{{ $item['label'] }}</td>
                                             <td class="text-nowrap">{{ formatRp($item['value']) }}</td>
                                         @endif
                                     @endif
