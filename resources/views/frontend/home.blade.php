@@ -140,7 +140,6 @@
                 </div>
             @elseif($nis != '')
                 <div class="col-12 text-center mt-3">
-                    {{-- //alert --}}
                     <div class="alert alert-danger" role="alert">
                         Data tagihan tidak ditemukan
                     </div>
