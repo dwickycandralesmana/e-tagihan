@@ -158,10 +158,10 @@
                     </b>
                     <ul class="nav nav-footer align-items-center justify-content-center">
                         <li class="nav-item">
-                            <a href="https://linktr.ee/adminpenda2" target="_blank" class="nav-link" target="_blank">Cek NIS Siswa</a>
+                            <a href="https://linktr.ee/adminpenda2" target="_blank" class="btn btn-warning me-1" target="_blank">Cek NIS Siswa</a>
                         </li>
                         <li class="nav-item">
-                            <a href="https://linktr.ee/adminpenda2kra" target="_blank" class="nav-link" target="_blank">Rekapan Wali Kelas</a>
+                            <a href="https://linktr.ee/adminpenda2kra" target="_blank" class="btn btn-warning me-1" target="_blank">Rekapan Wali Kelas</a>
                         </li>
                     </ul>
                 </div>
