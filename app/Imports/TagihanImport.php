@@ -30,6 +30,8 @@ class TagihanImport implements ToCollection, WithHeadingRow
             $alias[$column[$key]['key']] = $column[$key]['label'];
         }
 
+        Tagihan::where('jenjang_id', $this->jenjang_id)->delete();
+
         foreach ($collection as $key => $row) {
             $tagihan             = Tagihan::firstOrNew(['nis' => $row['nis']]);
             $tagihan->nama       = $row['nama'];
