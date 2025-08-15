@@ -12,6 +12,7 @@
     <link href="{{ asset('tabler/dist/css/tabler-payments.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('tabler/dist/css/tabler-vendors.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('tabler/dist/css/demo.min.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }} ">
 	<style>
 		@import url('https://rsms.me/inter/inter.css');
 
@@ -37,6 +38,7 @@
     <script src="{{ asset('tabler/dist/js/tabler.min.js') }}"></script>
     <script src="{{ asset('tabler/dist/js/demo.min.js') }}"></script>
 	<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
     @yield('scripts')
 </body>
 

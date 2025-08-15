@@ -22,12 +22,12 @@
                 </ul>
             </div>
                 @endif
-            <form action="{{ route('login') }}" method="POST" autocomplete="off" >
+            <form action="{{ route('login') }}" method="POST" autocomplete="off" id="form">
                 @csrf
 
                 <div class="mb-3">
                     <label class="form-label">Email address</label>
-                    <input type="email" class="form-control" placeholder="your@email.com" autocomplete="off" required name="email">
+                    <input type="email" class="form-control" placeholder="your@email.com" autocomplete="off" required name="email" id="email">
                 </div>
                 <div class="mb-2">
                     <label class="form-label">
@@ -52,6 +52,20 @@
                             </a>
                         </span>
                     </div>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="otp" class="form-label">OTP</label>
+                    <input type="text" name="otp" id="otp" class="form-control" required>
+                    <div id="otp-container">
+                        <a href="#" id="otp-button">Klik disini untuk mendapatkan OTP</a>
+                    </div>
+
+                    @error('otp')
+                        <span class="invalid-feedback">
+                            {{ $message }}
+                        </span>
+                    @enderror
                 </div>
                 <div class="form-footer">
                     <button type="submit" class="btn btn-primary w-100">Sign in</button>
@@ -78,6 +92,76 @@
             } else {
                 $password.attr('type', 'password');
                 $this.find('svg').removeClass('icon-eye-off').addClass('icon-eye');
+            }
+        });
+
+        var swalError = function (message) {
+            Swal.fire({
+                icon          : 'error',
+                title         : 'Oops...',
+                html          : message,
+                reverseButtons: true,
+            });
+        }
+
+        var swalSuccess = function (message) {
+            Swal.fire({
+                icon          : 'success',
+                title         : 'Success',
+                html          : message,
+                reverseButtons: true,
+            });
+        }
+
+        var addSpinner = function (element) {
+            element.attr('disabled', true);
+            element.html(`
+                <div class='spinner-border spinner-border-sm' role='status'>
+                    <span class='sr-only'>Loading...</span>
+                </div>
+            `);
+        }
+
+        var removeSpinner = function (element, text) {
+            element.attr('disabled', false);
+            element.html(text);
+        }
+
+        $('#otp-button').on('click', function(e) {
+            e.preventDefault();
+            const email = $('#email').val();
+            if (email) {
+                $('#otp-container').html('Kami sedang mengirim OTP...');
+
+                $.ajax({
+                    url: "{{ route('login.otp') }}",
+                    type: 'POST',
+                    data: {
+                        email: email,
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            $('#otp-container').html('Kami sudah mengirim OTP ke email anda, jika ada kendala silahkan hubungi admin');
+
+                            $("#form").append(`
+                                <input type="hidden" name="otp_id" value="${response.otp_id}">
+                            `);
+                            swalSuccess(response.message);
+                        } else {
+                            $('#otp-container').html('<a href="#" id="otp-button">Klik disini untuk mendapatkan OTP</a>');
+
+                            swalError(response.message);
+                        }
+                    },
+                    error: function(response) {
+                        $('#otp-container').html('<a href="#" id="otp-button">Klik disini untuk mendapatkan OTP</a>');
+
+                        swalError('Terjadi kesalahan');
+                    }
+                });
+            } else {
+                swalError('Email tidak valid');
             }
         });
     });

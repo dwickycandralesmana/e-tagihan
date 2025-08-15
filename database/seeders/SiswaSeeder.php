@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Siswa;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class SiswaSeeder extends Seeder
 {
@@ -12,13 +14,13 @@ class SiswaSeeder extends Seeder
      */
     public function run(): void
     {
-        $siswa = [
-            'nis' => '123456789',
-            'nama' => 'John Doe',
-        ];
+        $faker = Faker::create('id_ID');
 
-        foreach ($siswa as $key => $value) {
-            \App\Models\Siswa::updateOrCreate(['nis' => $value['nis']], $value);
+        for ($i = 0; $i < 100; $i++) {
+            Siswa::create([
+                'nama' => $faker->name(),
+                'nis' => $faker->unique()->numberBetween(1000000000, 9999999999),
+            ]);
         }
     }
 }

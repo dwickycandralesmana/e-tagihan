@@ -14,6 +14,7 @@ use App\Http\Middleware\IsUser;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::post('login/otp', [HomeController::class, 'otp'])->name('login.otp');
 Route::get('tagihan/{id}/pdf', [TagihanController::class, 'pdf'])->name('tagihan.pdf');
 
 Route::middleware('auth')->group(function () {
