@@ -46,8 +46,8 @@ class HomeController extends BaseController
         $this->nis       = $nis;
         $this->tagihan   = $tagihan;
 
-        $this->otp = Otp::first();
-        return view('emails.otp', $this->data);
+        // $this->otp = Otp::first();
+        // return view('emails.otp', $this->data);
         return view('frontend.home', $this->data);
     }
 

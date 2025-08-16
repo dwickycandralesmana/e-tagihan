@@ -32,6 +32,10 @@ if (!function_exists('encryptWithKey')) {
 if (!function_exists('decryptWithKey')) {
     function decryptWithKey($data, $key = 'IniKey123!@#')
     {
+        if (!$data) {
+            return null;
+        }
+
         $method = 'AES-256-CBC';
         list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
         return openssl_decrypt($encrypted_data, $method, $key, 0, $iv);
