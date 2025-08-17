@@ -7,11 +7,13 @@ use App\Mail\OtpMail;
 use App\Models\Form;
 use App\Models\Gender;
 use App\Models\Hasil;
+use App\Models\HistoryKelas;
 use App\Models\Jenjang;
 use App\Models\Order;
 use App\Models\Otp;
 use App\Models\Religion;
 use App\Models\RequestPembahasan;
+use App\Models\Siswa;
 use App\Models\Tagihan;
 use App\Models\Ujian;
 use App\Models\User;
@@ -40,7 +42,13 @@ class HomeController extends BaseController
         $jenjangId = $request->jenjang_id;
         $nis       = $request->nis;
 
-        $tagihan = Tagihan::whereJenjangId($jenjangId)->whereNis($nis)->first();
+        $siswa       = Siswa::whereNis($nis)->first();
+        $tahunAjaran = getDefaultTA();
+        $tagihan = HistoryKelas::query()
+            ->whereJenjangId($jenjangId)
+            ->whereSiswaId($siswa?->id)
+            ->whereTahunAjaran($tahunAjaran)
+            ->first();
 
         $this->jenjangId = $jenjangId;
         $this->nis       = $nis;

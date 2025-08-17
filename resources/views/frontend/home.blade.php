@@ -54,19 +54,24 @@
                     </h3>
                     <table>
                         <tr>
-                            <td width="50">Nama</td>
+                            <td width="100">Nama</td>
                             <td>:</td>
-                            <td>{{ $tagihan->nama }}</td>
+                            <td>{{ $tagihan->siswa->nama }}</td>
                         </tr>
                         <tr>
-                            <td width="50">NIS</td>
+                            <td width="100">NIS</td>
                             <td>:</td>
-                            <td>{{ $tagihan->nis }}</td>
+                            <td>{{ $tagihan->siswa->nis }}</td>
                         </tr>
                         <tr>
-                            <td width="50">Kelas</td>
+                            <td width="100">Kelas</td>
                             <td>:</td>
                             <td>{{ $tagihan->kelas }}</td>
+                        </tr>
+                        <tr>
+                            <td width="100">Tahun Ajaran</td>
+                            <td>:</td>
+                            <td>{{ $tagihan->tahun_ajaran }}</td>
                         </tr>
                     </table>
                     <Br>
@@ -74,9 +79,64 @@
                         <thead>
                             <th>No</th>
                             <th colspan="2">Rincian</th>
-                            <th>Jumlah</th>
+                            <th>Jumlah Tagihan</th>
+                            <th>Jumlah Pembayaran</th>
+                            <th>Sisa Tagihan</th>
                         </thead>
                         <tbody>
+                            @php
+                                $totalBayar   = 0;
+                                $totalTagihan = 0;
+                            @endphp
+
+                            @forelse ($tagihan->tagihans as $key => $item)
+                                <input type="hidden" name="tagihan_id[]" value="{{ $item->id }}">
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+
+                                    @if($item->deskripsi)
+                                        <td>
+                                            {{ $item->tipe_tagihan->nama }}
+
+                                            @if(in_array($item->tipe_tagihan->key, ['angsuran_ujian', 'spp']))
+                                                <br>
+                                                <small class="text-muted">dihitung selama 12 bulan</small>
+                                            @endif
+                                        </td>
+                                        <td>{{ $item->deskripsi }}</td>
+                                    @else
+                                        <td colspan="2">
+                                            {{ $item->tipe_tagihan->nama }}
+
+                                            @if(in_array($item->tipe_tagihan->key, ['angsuran_ujian', 'spp']))
+                                                <br>
+                                                <small class="text-muted">dihitung selama 12 bulan</small>
+                                            @endif
+                                        </td>
+
+                                    @endif
+                                    <td>
+                                        {{ formatRp($item->total) }}
+                                    </td>
+                                    @php
+                                        $tempTotal = $item->pembayaran_details->sum('jumlah');
+                                        $totalBayar += $tempTotal;
+                                        $totalTagihan += $item->total;
+                                    @endphp
+
+                                    <td>
+                                        {{ formatRp($tempTotal) }}
+                                    </td>
+                                    <td>
+                                        {{ formatRp($item->total - $tempTotal) }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6">Data tidak ditemukan</td>
+                                </tr>
+                            @endforelse
+
                             @forelse(json_decode($tagihan->column, true) ?? [] as $key => $item)
                                 @php
                                     if($item['key'] == 'total_tunggakan' && json_decode($tagihan->column, true)[$key-1]['key'] == 'tunggakan'){
