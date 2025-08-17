@@ -49,12 +49,13 @@ class GenerateTagihan extends Command
                 $tipeTagihan = TipeTagihan::where('tahun_ajaran', $tahunAjaran)->where('jenjang_id', $jenjangId)->get();
 
                 foreach ($tipeTagihan as $tipe) {
-                    $tagihan                  = new TagihanNew();
-                    $tagihan->siswa_id        = $siswa->id;
-                    $tagihan->tipe_tagihan_id = $tipe->id;
-                    $tagihan->jenjang_id      = $tipe->jenjang_id;
-                    $tagihan->tahun_ajaran    = $tahunAjaran;
-                    $tagihan->total           = $tipe->total;
+                    $tagihan                   = new TagihanNew();
+                    $tagihan->siswa_id         = $siswa->id;
+                    $tagihan->history_kelas_id = $historyKelas->id;
+                    $tagihan->tipe_tagihan_id  = $tipe->id;
+                    $tagihan->jenjang_id       = $tipe->jenjang_id;
+                    $tagihan->tahun_ajaran     = $tahunAjaran;
+                    $tagihan->total            = $tipe->total;
                     $tagihan->save();
                 }
             }

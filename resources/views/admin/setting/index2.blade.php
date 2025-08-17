@@ -62,7 +62,7 @@ Pengaturan
                 url: "{{ route('setting.data') }}",
             },
             columns: [
-                {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: true, searchable: false, width: '5%'},
+                {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, width: '5%'},
                 {data: 'description', name: 'description'},
                 {data: 'value', name: 'value'},
                 {data: 'action', name: 'action', orderable: false, searchable: false, width: '30%'},

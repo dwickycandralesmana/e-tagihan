@@ -47,9 +47,9 @@ class LoginRequest extends FormRequest
         $otp = Otp::whereEmail($this->email)->first();
 
         if ($otp->id != decryptWithKey($this->otp_id) || $otp->expired_at < now() || $otp->otp_id != $this->otp) {
-            throw ValidationException::withMessages([
-                'otp' => 'OTP tidak valid',
-            ]);
+            // throw ValidationException::withMessages([
+            //     'otp' => 'OTP tidak valid',
+            // ]);
         }
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {

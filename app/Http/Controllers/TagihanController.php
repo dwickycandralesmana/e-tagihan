@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Imports\TagihanImport;
+use App\Models\HistoryKelas;
 use App\Models\Jenjang;
 use App\Models\Tagihan;
+use App\Models\TagihanNew;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
@@ -28,8 +30,12 @@ class TagihanController extends BaseController
 
     public function data(Request $request)
     {
-        $data = Tagihan::query()
-            ->with('jenjang');
+        $data = HistoryKelas::query()
+            ->with('jenjang', 'siswa');
+
+        if ($request->tahun_ajaran) {
+            $data->where('tahun_ajaran', $request->tahun_ajaran);
+        }
 
         return DataTables::of($data)
             ->addIndexColumn()
@@ -82,14 +88,51 @@ class TagihanController extends BaseController
 
     public function show($id)
     {
-        $this->tagihan = Tagihan::findOrFail($id);
+        $this->tagihan = HistoryKelas::with('tagihans', 'tagihans.pembayaran_details')->findOrFail($id);
 
         return view('admin.tagihan.show', $this->data);
     }
 
+    public function update(Request $request, $id)
+    {
+        DB::beginTransaction();
+        try {
+            foreach ($request->tagihan_id as $key => $item) {
+                $tagihan = TagihanNew::findOrFail($item);
+                $deskripsi = isset($request->deskripsi[$item]) ? $request->deskripsi[$item] : null;
+
+                $tagihan->update([
+                    'total' => $request->total[$item],
+                    'deskripsi' => $deskripsi,
+                ]);
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            $notification = array(
+                'message'    => $e->getMessage(),
+                'alert-type' => 'error',
+                'status'     => false,
+            );
+
+            return redirect()->back()->with($notification);
+        }
+
+        DB::commit();
+
+        $notification = array(
+            'status' => true,
+            'alert-type' => 'success',
+            'message' => 'Data berhasil diupdate!',
+        );
+
+        return redirect()->back()->with($notification);
+    }
+
     public function pdf($id)
     {
-        $tagihan = Tagihan::findOrFail($id);
+        $tagihan = HistoryKelas::with('tagihans', 'tagihans.pembayaran_details')->findOrFail($id);
+        // return view('pdf.tagihan', compact('tagihan'));
         $pdf = Pdf::loadView('pdf.tagihan', compact('tagihan'));
 
         return $pdf->stream('Kartu Kendali - ' . $tagihan->nama . '.pdf');

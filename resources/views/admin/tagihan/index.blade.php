@@ -24,6 +24,19 @@ Tagihan
         <div class="card">
             <div class="card-body">
                 <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="tahun_ajaran" class="fw-bold">Tahun Ajaran</label>
+                            <select name="tahun_ajaran" id="tahun_ajaran" class="form-control select2">
+                                <option value="">-- Pilih Tahun Ajaran --</option>
+                                @for ($i = date('Y'); $i >= 2019; $i--)
+                                    <option value="{{ $i }}" @if ($i == getDefaultTA()) selected @endif>{{ $i }}</option>
+                                @endfor
+                            </select>
+
+                            <button type="button" class="btn btn-primary mt-3 float-end" id="btnFilter">Filter</button>
+                        </div>
+                    </div>
                     <div class="col-12">
                         <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modalImport">
                             <i class="fa fa-upload"></i> Import
@@ -34,6 +47,7 @@ Tagihan
                                     <th>No</th>
                                     <th>NIS</th>
                                     <th>Nama</th>
+                                    <th>Tahun Ajaran</th>
                                     <th>Jenjang</th>
                                     <th>Kelas</th>
                                     <th>Aksi</th>
@@ -92,24 +106,34 @@ Tagihan
 <script type="text/javascript">
     $(document).ready(function() {
         $('#liTagihan').addClass('active');
+        $('.select2').select2();
+
         let table = $("#table").DataTable({
-            processing: false,
-            serverSide: false,
+            processing: true,
+            serverSide: true,
             columnDefs: [{
                 defaultContent: "-",
                 targets       : "_all"
             }],
             ajax: {
                 url: "{{ route('tagihan.data') }}",
+                data: function (d) {
+                    d.tahun_ajaran = $('#tahun_ajaran').val();
+                }
             },
             columns: [
-                {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: true, searchable: false, width: '5%'},
-                {data: 'nis', name: 'nis'},
-                {data: 'nama', name: 'nama'},
+                {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, width: '5%'},
+                {data: 'siswa.nis', name: 'siswa.nis', className: 'text-start'},
+                {data: 'siswa.nama', name: 'siswa.nama'},
+                {data: 'tahun_ajaran', name: 'tahun_ajaran'},
                 {data: 'jenjang.nama', name: 'jenjang.nama'},
                 {data: 'kelas', name: 'kelas'},
                 {data: 'action', name: 'action', orderable: false, searchable: false, width: '30%'},
             ],
+        });
+
+        $('#btnFilter').on('click', function() {
+            table.ajax.reload();
         });
 
         $(document).on('click','.btn-delete', function(){
