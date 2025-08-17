@@ -54,6 +54,7 @@ class GenerateTagihan extends Command
                     $tagihan->tipe_tagihan_id = $tipe->id;
                     $tagihan->jenjang_id      = $tipe->jenjang_id;
                     $tagihan->tahun_ajaran    = $tahunAjaran;
+                    $tagihan->total           = $tipe->total;
                     $tagihan->save();
                 }
             }

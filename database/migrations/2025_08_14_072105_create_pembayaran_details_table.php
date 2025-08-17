@@ -20,8 +20,8 @@ return new class extends Migration
             $table->year('tahun_ajaran')->nullable();
             $table->integer('bulan')->nullable();
             $table->string('kelas')->nullable();
-            $table->decimal('bayar', 15, 2)->default(0);
-            $table->decimal('potongan', 15, 2)->default(0);
+            $table->integer('bayar')->default(0);
+            $table->integer('potongan')->default(0);
             $table->timestamps();
 
             $table->foreign('pembayaran_id')->references('id')->on('pembayarans')->onDelete('cascade');

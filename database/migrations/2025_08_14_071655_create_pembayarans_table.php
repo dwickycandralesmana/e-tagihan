@@ -18,10 +18,11 @@ return new class extends Migration
             $table->year('tahun_ajaran')->nullable();
             $table->string('kelas')->nullable();
             $table->longText('deskripsi')->nullable();
+            $table->date('tanggal_pembayaran')->nullable();
             $table->enum('metode_pembayaran', ['Cash', 'Transfer'])->default('Cash');
-            $table->decimal('total_tagihan', 15, 2)->default(0);
-            $table->decimal('total_potongan', 15, 2)->default(0);
-            $table->decimal('total_bayar', 15, 2)->default(0);
+            $table->integer('total_tagihan')->default(0);
+            $table->integer('total_potongan')->default(0);
+            $table->integer('total_bayar')->default(0);
             $table->timestamps();
 
             $table->foreign('siswa_id')->references('id')->on('siswas')->onDelete('cascade');

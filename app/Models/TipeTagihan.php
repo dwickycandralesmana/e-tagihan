@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class TipeTagihan extends Model
 {
     use HasFactory;
+
+    public function jenjang()
+    {
+        return $this->belongsTo(Jenjang::class);
+    }
 }

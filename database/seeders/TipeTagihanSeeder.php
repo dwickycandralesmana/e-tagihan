@@ -22,7 +22,8 @@ class TipeTagihanSeeder extends Seeder
             $tipe->jenjang_id   = 1;
             $tipe->key          = 'daftar_ulang';
             $tipe->nama         = 'Daftar Ulang';
-            $tipe->total        = 0;
+            $tipe->total        = 1850000;
+            $tipe->is_default   = true;
             $tipe->save();
 
             $tipe               = new TipeTagihan();
@@ -30,7 +31,8 @@ class TipeTagihanSeeder extends Seeder
             $tipe->jenjang_id   = 1;
             $tipe->key          = 'spp';
             $tipe->nama         = 'SPP Kelas X';
-            $tipe->total        = 0;
+            $tipe->total        = 1800000;
+            $tipe->is_default   = true;
             $tipe->save();
 
             //XI
@@ -40,6 +42,7 @@ class TipeTagihanSeeder extends Seeder
             $tipe->key          = 'tunggakan_kelas_x';
             $tipe->nama         = 'Tunggakan Kelas X';
             $tipe->total        = 0;
+            $tipe->is_default   = true;
             $tipe->save();
 
             $tipe               = new TipeTagihan();
@@ -47,7 +50,8 @@ class TipeTagihanSeeder extends Seeder
             $tipe->jenjang_id   = 2;
             $tipe->key          = 'spp';
             $tipe->nama         = 'SPP Kelas XI';
-            $tipe->total        = 0;
+            $tipe->total        = 1920000;
+            $tipe->is_default   = true;
             $tipe->save();
 
             $tipe               = new TipeTagihan();
@@ -55,7 +59,8 @@ class TipeTagihanSeeder extends Seeder
             $tipe->jenjang_id   = 2;
             $tipe->key          = 'biaya_praktek';
             $tipe->nama         = 'Biaya Praktek';
-            $tipe->total        = 0;
+            $tipe->total        = 250000;
+            $tipe->is_default   = true;
             $tipe->save();
 
             $tipe               = new TipeTagihan();
@@ -63,7 +68,8 @@ class TipeTagihanSeeder extends Seeder
             $tipe->jenjang_id   = 2;
             $tipe->key          = 'prakerin';
             $tipe->nama         = 'Prakerin';
-            $tipe->total        = 0;
+            $tipe->total        = 90000;
+            $tipe->is_default   = true;
             $tipe->save();
 
             //XII
@@ -73,6 +79,7 @@ class TipeTagihanSeeder extends Seeder
             $tipe->key          = 'tunggakan_kelas_xi';
             $tipe->nama         = 'Tunggakan Kelas XI';
             $tipe->total        = 0;
+            $tipe->is_default   = true;
             $tipe->save();
 
             $tipe               = new TipeTagihan();
@@ -80,7 +87,8 @@ class TipeTagihanSeeder extends Seeder
             $tipe->jenjang_id   = 3;
             $tipe->key          = 'spp';
             $tipe->nama         = 'SPP Kelas XII';
-            $tipe->total        = 0;
+            $tipe->total        = 1800000;
+            $tipe->is_default   = true;
             $tipe->save();
 
             $tipe               = new TipeTagihan();
@@ -88,7 +96,8 @@ class TipeTagihanSeeder extends Seeder
             $tipe->jenjang_id   = 3;
             $tipe->key          = 'angsuran_ujian';
             $tipe->nama         = 'Angsuran Ujian Kelas XII';
-            $tipe->total        = 0;
+            $tipe->total        = 600000;
+            $tipe->is_default   = true;
             $tipe->save();
 
             $tipe               = new TipeTagihan();
@@ -96,7 +105,8 @@ class TipeTagihanSeeder extends Seeder
             $tipe->jenjang_id   = 3;
             $tipe->key          = 'biaya_praktek';
             $tipe->nama         = 'Biaya Praktek';
-            $tipe->total        = 0;
+            $tipe->total        = 250000;
+            $tipe->is_default   = true;
             $tipe->save();
 
             $tipe               = new TipeTagihan();
@@ -104,7 +114,8 @@ class TipeTagihanSeeder extends Seeder
             $tipe->jenjang_id   = 3;
             $tipe->key          = 'prakerin';
             $tipe->nama         = 'Prakerin';
-            $tipe->total        = 0;
+            $tipe->total        = 90000;
+            $tipe->is_default   = true;
             $tipe->save();
         }
     }

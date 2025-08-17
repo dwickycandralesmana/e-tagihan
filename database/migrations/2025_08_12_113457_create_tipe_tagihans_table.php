@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('jenjang_id');
             $table->string('key')->nullable();
             $table->string('nama');
-            $table->decimal('total', 15, 2)->default(0);
+            $table->integer('total')->default(0);
             $table->timestamps();
         });
     }

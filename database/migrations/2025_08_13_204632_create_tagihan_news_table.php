@@ -19,6 +19,7 @@ return new class extends Migration
             $table->year('tahun_ajaran')->nullable();
             $table->string('kelas')->nullable();
             $table->longText('deskripsi')->nullable();
+            $table->integer('total')->default(0);
             $table->timestamps();
 
             $table->foreign('tipe_tagihan_id')->references('id')->on('tipe_tagihans')->onDelete('cascade');

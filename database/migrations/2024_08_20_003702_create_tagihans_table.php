@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('kelas')->nullable();
             $table->string('jenjang_id')->nullable();
             $table->longText('column')->nullable();
-            $table->decimal('total', 15, 2)->default(0);
+            $table->integer('total')->default(0);
             $table->timestamps();
         });
     }

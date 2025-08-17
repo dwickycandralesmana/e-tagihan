@@ -16,7 +16,7 @@ class SiswaSeeder extends Seeder
     {
         $faker = Faker::create('id_ID');
 
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             Siswa::create([
                 'nama' => $faker->name(),
                 'nis' => $faker->unique()->numberBetween(1000000000, 9999999999),

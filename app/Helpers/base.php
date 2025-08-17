@@ -41,3 +41,16 @@ if (!function_exists('decryptWithKey')) {
         return openssl_decrypt($encrypted_data, $method, $key, 0, $iv);
     }
 }
+
+if (!function_exists('getDefaultTA')) {
+    function getDefaultTA()
+    {
+        $date = date('Y-m-d');
+
+        if (date('m', strtotime($date)) < 7) {
+            return date('Y', strtotime($date)) - 1;
+        }
+
+        return date('Y', strtotime($date));
+    }
+}

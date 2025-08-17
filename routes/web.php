@@ -4,9 +4,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\JenisPembayaranController;
 use App\Http\Controllers\JenjangController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
@@ -37,6 +39,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', IsAdmin::class])->group(function () {
+    Route::get('jenis-pembayaran/data', [JenisPembayaranController::class, 'data'])->name('jenis-pembayaran.data');
+    Route::resource('jenis-pembayaran', JenisPembayaranController::class);
+
+    Route::get('siswa/data', [SiswaController::class, 'data'])->name('siswa.data');
+    Route::resource('siswa', SiswaController::class);
+
     Route::post('user/import', [UserController::class, 'import'])->name('user.import');
     Route::get('user/data', [UserController::class, 'data'])->name('user.data');
     Route::resource('user', UserController::class);
