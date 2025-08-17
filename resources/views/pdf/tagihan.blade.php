@@ -53,7 +53,7 @@
                     <td>
                         <div id="img" style="margin-right: 10px;">
                             <img id="logo"
-                                src="{{ asset('assets/img/logo.png') }}"
+                                src="{{ public_path('assets/img/logo.png') }}"
                                 width="120" height="140" />
                         </div>
                     </td>
@@ -216,7 +216,7 @@
                                 Bendahara Sekolah,
                             </div>
                             <div class="my-2">
-                                <img src="{{ asset('assets/img/ttd.png') }}" alt="ttd" width="100" height="100">
+                                <img src="{{ public_path('assets/img/ttd.png') }}" alt="ttd" width="100" height="100">
                             </div>
                             <div id="camat">
                                 <strong><u>Najmudin, S.Kom</u></strong>
