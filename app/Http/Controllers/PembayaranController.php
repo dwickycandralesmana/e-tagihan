@@ -229,6 +229,9 @@ class PembayaranController extends BaseController
         DB::beginTransaction();
         try {
             $tipe = TipeTagihan::findOrFail($id);
+            if ($tipe->created_by != auth()->user()->id) {
+                throw new Exception("Anda tidak memiliki izin untuk menghapus data ini");
+            }
             $tipe->delete();
         } catch (Exception $e) {
             DB::rollback();
@@ -275,7 +278,7 @@ class PembayaranController extends BaseController
             ->addColumn('action', function ($row) {
                 $html = "";
 
-                if (auth()->user()) {
+                if (auth()->user() && $row->created_by == auth()->user()->id) {
                     $html .= "<a href='" . route('pembayaran.edit', $row->id) . "' class='btn btn-warning me-1 mb-1'><i class='fas fa-edit'></i> Edit</a>";
 
                     if (!$row->is_default) {
