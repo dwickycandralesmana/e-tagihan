@@ -25,7 +25,9 @@ if (!function_exists('encryptWithKey')) {
         $method = 'AES-256-CBC';
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length($method));
         $encrypted = openssl_encrypt($data, $method, $key, 0, $iv);
-        return base64_encode($encrypted . '::' . $iv);
+        $combined = $encrypted . '::' . $iv;
+        // Use URL-safe base64 encoding (replaces + with -, / with _, removes padding =)
+        return rtrim(strtr(base64_encode($combined), '+/', '-_'), '=');
     }
 }
 
@@ -36,6 +38,9 @@ if (!function_exists('decryptWithKey')) {
             return null;
         }
 
+        // Convert URL-safe base64 back to regular base64
+        $data = str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT);
+        
         $method = 'AES-256-CBC';
         list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
         return openssl_decrypt($encrypted_data, $method, $key, 0, $iv);

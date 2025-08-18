@@ -110,6 +110,7 @@
                             <th class="text-center" colspan="2">Rincian</th>
                             <th class="text-center">Jumlah Tagihan</th>
                             <th class="text-center">Jumlah Pembayaran</th>
+                            <th class="text-center">Jumlah Potongan</th>
                             <th class="text-center">Sisa Kekurangan</th>
                         </thead>
                         <tbody>
@@ -148,7 +149,9 @@
                                         {{ formatRp($item->total) }}
                                     </td>
                                     @php
-                                        $tempTotal = $item->pembayaran_details->sum('jumlah');
+                                        $tempTotal = $item->pembayaran_details->sum('bayar');
+                                        $tempPotongan = $item->pembayaran_details->sum('potongan');
+
                                         $totalBayar += $tempTotal;
                                         $totalTagihan += $item->total;
                                     @endphp
@@ -157,7 +160,10 @@
                                         {{ formatRp($tempTotal) }}
                                     </td>
                                     <td>
-                                        {{ formatRp($item->total - $tempTotal) }}
+                                        {{ formatRp($tempPotongan) }}
+                                    </td>
+                                    <td>
+                                        {{ formatRp($item->total - ($tempTotal + $tempPotongan)) }}
                                     </td>
                                 </tr>
                             @empty

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Imports\UserImport;
+use App\Models\HistoryKelas;
 use App\Models\Jenjang;
+use App\Models\TagihanNew;
 use App\Models\TipeTagihan;
 use App\Models\User;
 use Exception;
@@ -57,6 +59,19 @@ class JenisPembayaranController extends BaseController
             $tipe->tahun_ajaran = $request->tahun_ajaran;
             $tipe->total        = $request->total;
             $tipe->save();
+
+            $kelas = HistoryKelas::where('jenjang_id', $request->jenjang_id)->where('tahun_ajaran', $request->tahun_ajaran)->get();
+
+            foreach ($kelas as $item) {
+                $tagihan                   = new TagihanNew();
+                $tagihan->siswa_id         = $item->siswa_id;
+                $tagihan->history_kelas_id = $item->id;
+                $tagihan->tipe_tagihan_id  = $tipe->id;
+                $tagihan->jenjang_id       = $tipe->jenjang_id;
+                $tagihan->tahun_ajaran     = $request->tahun_ajaran;
+                $tagihan->total            = $tipe->total;
+                $tagihan->save();
+            }
 
             $notification = array(
                 'message'    => 'Data berhasil disimpan',

@@ -2,8 +2,12 @@
 
 namespace App\Imports;
 
+use App\Models\HistoryKelas;
 use App\Models\Jenjang;
+use App\Models\Siswa;
 use App\Models\Tagihan;
+use App\Models\TagihanNew;
+use App\Models\TipeTagihan;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -23,39 +27,65 @@ class TagihanImport implements ToCollection, WithHeadingRow
     public function collection(Collection $collection)
     {
         $jenjang = Jenjang::find($this->jenjang_id);
-        $column  = json_decode($jenjang->column, true) ?? [];
-        $alias   = [];
+        // $column  = json_decode($jenjang->column, true) ?? [];
+        // $alias   = [];
 
-        foreach ($column as $key => $value) {
-            $alias[$column[$key]['key']] = $column[$key]['label'];
-        }
+        // foreach ($column as $key => $value) {
+        //     $alias[$column[$key]['key']] = $column[$key]['label'];
+        // }
 
-        Tagihan::where('jenjang_id', $this->jenjang_id)->delete();
+        // Tagihan::where('jenjang_id', $this->jenjang_id)->delete();
 
         foreach ($collection as $key => $row) {
-            $tagihan             = Tagihan::firstOrNew(['nis' => $row['nis']]);
-            $tagihan->nama       = $row['nama'];
-            $tagihan->kelas      = $row['kelas'];
-            $tagihan->jenjang_id = $this->jenjang_id;
+            $siswa = Siswa::where('nis', $row['nis'])->first();
 
-            unset($row['nama']);
-            unset($row['kelas']);
-            unset($row['nis']);
-
-            $row = $row->toArray();
-
-            $column = [];
-
-            foreach ($alias as $key => $value) {
-                $column[] = [
-                    'key' => $key,
-                    'label' => $value,
-                    'value' => $row[$key] ?? 0,
-                ];
+            if (!$siswa) {
+                continue;
             }
 
-            $tagihan->column = json_encode($column);
-            $tagihan->save();
+            $historyKelas               = new HistoryKelas();
+            $historyKelas->siswa_id     = $siswa->id;
+            $historyKelas->jenjang_id   = $this->jenjang_id;
+            $historyKelas->tahun_ajaran = $row['tahun_ajaran'];
+            $historyKelas->kelas        = $row['kelas'];
+            $historyKelas->save();
+
+            $tipeTagihan = TipeTagihan::where('tahun_ajaran', $row['tahun_ajaran'])->where('jenjang_id', $this->jenjang_id)->get();
+
+            foreach ($tipeTagihan as $tipe) {
+                $tagihan                   = new TagihanNew();
+                $tagihan->siswa_id         = $siswa->id;
+                $tagihan->history_kelas_id = $historyKelas->id;
+                $tagihan->tipe_tagihan_id  = $tipe->id;
+                $tagihan->jenjang_id       = $tipe->jenjang_id;
+                $tagihan->tahun_ajaran     = $row['tahun_ajaran'];
+                $tagihan->total            = $tipe->total;
+                $tagihan->save();
+            }
+
+            // $tagihan             = Tagihan::firstOrNew(['nis' => $row['nis']]);
+            // $tagihan->nama       = $row['nama'];
+            // $tagihan->kelas      = $row['kelas'];
+            // $tagihan->jenjang_id = $this->jenjang_id;
+
+            // unset($row['nama']);
+            // unset($row['kelas']);
+            // unset($row['nis']);
+
+            // $row = $row->toArray();
+
+            // $column = [];
+
+            // foreach ($alias as $key => $value) {
+            //     $column[] = [
+            //         'key' => $key,
+            //         'label' => $value,
+            //         'value' => $row[$key] ?? 0,
+            //     ];
+            // }
+
+            // $tagihan->column = json_encode($column);
+            // $tagihan->save();
         }
     }
 }

@@ -86,9 +86,11 @@ Tagihan
                         <div class="form-text">File harus berupa .xlsx</div>
                     </div>
 
-                    <div class="alert alert-warning">
+                    <a href="{{ asset('imports/template-kelas.xlsx') }}" class="btn btn-success"><i class="fas fa-file-excel"></i> Download Template</a>
+
+                    {{-- <div class="alert alert-warning">
                         <strong>Perhatian!</strong> Pastikan file yang diupload sesuai dengan format yang telah ditentukan. Silahkan download formatnya terlebih dahulu dari <b>"Menu Jenjang".</b>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
