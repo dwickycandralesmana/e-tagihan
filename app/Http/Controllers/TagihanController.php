@@ -52,7 +52,7 @@ class TagihanController extends BaseController
                     $html .= "<a href='" . route('tagihan.show', $row->id) . "' class='btn btn-info me-1 mb-1'><i class='fas fa-eye'></i> Detail</a>";
                     $html .= "<a href='" . route('tagihan.pdf', encryptWithKey($row->id)) . "' target='_blank' class='btn btn-success me-1 mb-1'><i class='fas fa-file-pdf'></i> Download Kartu Kendali</a>";
 
-                    $html .= "<a href='" . route('pembayaran.create', encryptWithKey($row->id)) . "' target='_blank' class='btn btn-primary me-1 mb-1'><i class='fas fa-plus'></i> Buat Pembayaran</a>";
+                    $html .= "<a href='" . route('pembayaran.create', ['id' => encryptWithKey($row->id)]) . "' target='_blank' class='btn btn-primary me-1 mb-1'><i class='fas fa-plus'></i> Buat Pembayaran</a>";
                     // $html .= "<button class='btn btn-danger btn-delete mb-1 me-1' data-id='" . $row->id . "'><i class='fas fa-trash'></i> Hapus</button>";
                 }
 

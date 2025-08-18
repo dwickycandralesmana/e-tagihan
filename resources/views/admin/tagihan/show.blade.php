@@ -110,8 +110,14 @@ Tagihan
                                     @endforelse
 
                                     <tr>
-                                        <td colspan="5" class="text-end">
-                                            <h3>Total Sisa Tagihan</h3>
+                                        <td colspan="3" class="text-end">
+                                            <h3>Total</h3>
+                                        </td>
+                                        <td>
+                                            <h3>{{ formatRp($totalTagihan) }}</h3>
+                                        </td>
+                                        <td>
+                                            <h3>{{ formatRp($totalBayar) }}</h3>
                                         </td>
                                         <td>
                                             <h3>{{ formatRp($totalTagihan - $totalBayar) }}</h3>
