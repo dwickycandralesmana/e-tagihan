@@ -41,7 +41,7 @@ class SiswaController extends BaseController
     {
         $request->validate([
             'nama' => 'required',
-            'nis'  => 'required|unique:siswas,nis',
+            'nis'  => 'required|integer|unique:siswas,nis',
         ]);
 
         DB::beginTransaction();
@@ -96,7 +96,7 @@ class SiswaController extends BaseController
     {
         $request->validate([
             'nama' => 'required',
-            'nis'  => 'required|unique:siswas,nis,' . $id,
+            'nis'  => 'required|integer|unique:siswas,nis,' . $id,
         ]);
 
         DB::beginTransaction();
