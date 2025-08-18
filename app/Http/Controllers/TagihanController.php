@@ -49,9 +49,11 @@ class TagihanController extends BaseController
                 $html = "";
 
                 if (auth()->user()) {
-                    $html .= "<a href='" . route('tagihan.show', $row->id) . "' class='btn btn-primary me-1 mb-1'><i class='fas fa-eye'></i> Detail</a>";
-                    $html .= "<a href='" . route('tagihan.pdf', $row->id) . "' target='_blank' class='btn btn-success me-1 mb-1'><i class='fas fa-file-pdf'></i> Download Kartu Kendali</a>";
-                    $html .= "<button class='btn btn-danger btn-delete mb-1 me-1' data-id='" . $row->id . "'><i class='fas fa-trash'></i> Hapus</button>";
+                    $html .= "<a href='" . route('tagihan.show', $row->id) . "' class='btn btn-info me-1 mb-1'><i class='fas fa-eye'></i> Detail</a>";
+                    $html .= "<a href='" . route('tagihan.pdf', encryptWithKey($row->id)) . "' target='_blank' class='btn btn-success me-1 mb-1'><i class='fas fa-file-pdf'></i> Download Kartu Kendali</a>";
+
+                    $html .= "<a href='" . route('pembayaran.create', encryptWithKey($row->id)) . "' target='_blank' class='btn btn-primary me-1 mb-1'><i class='fas fa-plus'></i> Buat Pembayaran</a>";
+                    // $html .= "<button class='btn btn-danger btn-delete mb-1 me-1' data-id='" . $row->id . "'><i class='fas fa-trash'></i> Hapus</button>";
                 }
 
                 return $html;
@@ -97,6 +99,10 @@ class TagihanController extends BaseController
     {
         DB::beginTransaction();
         try {
+            $tagihan        = HistoryKelas::findOrFail($id);
+            $tagihan->kelas = $request->kelas;
+            $tagihan->save();
+
             foreach ($request->tagihan_id as $key => $item) {
                 $tagihan = TagihanNew::findOrFail($item);
                 $deskripsi = isset($request->deskripsi[$item]) ? $request->deskripsi[$item] : null;
@@ -131,11 +137,13 @@ class TagihanController extends BaseController
 
     public function pdf($id)
     {
+        $id = decryptWithKey($id);
+
         $tagihan = HistoryKelas::with('tagihans', 'tagihans.pembayaran_details')->findOrFail($id);
         // return view('pdf.tagihan', compact('tagihan'));
         $pdf = Pdf::loadView('pdf.tagihan', compact('tagihan'));
 
-        return $pdf->stream('Kartu Kendali - ' . $tagihan->nama . '.pdf');
+        return $pdf->stream('Kartu Kendali - ' . $tagihan->siswa->nama . '.pdf');
     }
 
     public function destroy($id)

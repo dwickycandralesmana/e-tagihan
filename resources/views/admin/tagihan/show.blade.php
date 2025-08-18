@@ -48,7 +48,7 @@ Tagihan
                         <div class="col-md-3 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Kelas</label>
-                                <input type="text" class="form-control" value="{{ $tagihan->kelas }}" readonly>
+                                <input type="text" class="form-control" value="{{ $tagihan->kelas }}" name="kelas">
                             </div>
                         </div>
                         <div class="col-12 table-responsive">

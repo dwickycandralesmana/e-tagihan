@@ -55,7 +55,7 @@ Edit Jenjang
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-12 d-none">
                             <button type="button" class="btn btn-primary mb-3" id="btnAddRow"><i class="fas fa-plus"></i> Tambah Kolom</button>
 
                             <table class="table table-bordered">

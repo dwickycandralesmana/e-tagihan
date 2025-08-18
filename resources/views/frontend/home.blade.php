@@ -172,7 +172,7 @@
                         </tbody>
                     </table>
 
-                    <a href="{{ route('tagihan.pdf', $tagihan->id) }}" target="_blank" class="btn btn-primary"><i class="fas fa-file-pdf me-1"></i> Download Kartu Kendali</a>
+                    <a href="{{ route('tagihan.pdf', encryptWithKey($tagihan->id)) }}" target="_blank" class="btn btn-primary"><i class="fas fa-file-pdf me-1"></i> Download Kartu Kendali</a>
 
                     <h3 class="mt-3">
                         Keterangan

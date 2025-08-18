@@ -6,6 +6,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\JenisPembayaranController;
 use App\Http\Controllers\JenjangController;
+use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SiswaController;
@@ -39,6 +40,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', IsAdmin::class])->group(function () {
+    Route::get('pembayaran/data', [PembayaranController::class, 'data'])->name('pembayaran.data');
+    Route::resource('pembayaran', PembayaranController::class);
+
     Route::get('jenis-pembayaran/data', [JenisPembayaranController::class, 'data'])->name('jenis-pembayaran.data');
     Route::resource('jenis-pembayaran', JenisPembayaranController::class);
 

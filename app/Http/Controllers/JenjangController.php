@@ -121,7 +121,7 @@ class JenjangController extends BaseController
 
                 if (auth()->user()) {
                     $html .= "<a href='" . route('jenjang.edit', $row->id) . "' class='btn btn-warning me-1 mb-1'><i class='fas fa-edit'></i> Edit</a>";
-                    $html .= "<a href='" . route('jenjang.export', $row->id) . "' class='btn btn-success me-1 mb-1'><i class='fas fa-file-excel'></i> Download Template</a>";
+                    // $html .= "<a href='" . route('jenjang.export', $row->id) . "' class='btn btn-success me-1 mb-1'><i class='fas fa-file-excel'></i> Download Template</a>";
                 }
 
                 return $html;
