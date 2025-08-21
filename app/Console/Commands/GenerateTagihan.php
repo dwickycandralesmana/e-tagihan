@@ -35,9 +35,9 @@ class GenerateTagihan extends Command
         $siswaXI     = Siswa::limit(10)->offset(10)->get();
         $siswaXII    = Siswa::limit(10)->offset(20)->get();
 
-        $jenjangId = 1;
+        $jenjangId = 2;
         $kelas = ["X", "XI", "XII"];
-        for ($tahunAjaran = 2023; $tahunAjaran <= 2025; $tahunAjaran++) {
+        for ($tahunAjaran = 2025; $tahunAjaran <= 2025; $tahunAjaran++) {
             foreach ($siswaX as $siswa) {
                 $historyKelas               = new HistoryKelas();
                 $historyKelas->siswa_id     = $siswa->id;
