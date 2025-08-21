@@ -391,6 +391,36 @@ Tambah Pembayaran
            return false;
        }
 
+       let isValidPayment = true
+       $('.jumlah').each(function() {
+           let container = $(this).closest('.tr-item');
+           let kekuranganContainer = container.find('.kekurangan-container:visible');
+           let jumlah = parseFloat($(this).val());
+           let kekurangan = parseFloat(kekuranganContainer.find('.kekurangan').val());
+
+           if(jumlah > kekurangan) {
+               isValidPayment = false;
+           }
+       });
+
+       if(!isValidPayment) {
+           Swal.fire({
+               icon: 'error',
+               title: 'Gagal',
+               text: 'Jumlah pembayaran melebihi kekurangan tagihan!',
+           });
+           return false;
+       }
+
+       if (!isValid) {
+           Swal.fire({
+               icon: 'error',
+               title: 'Gagal',
+               text: 'Harap isi jumlah tagihan!',
+           });
+           return false;
+       }
+
        $('#formPembayaran').submit();
     });
 </script>
