@@ -110,7 +110,7 @@ Tambah Pembayaran
                                                 </td>
                                                 <td>
                                                     <input type="hidden" name="details[{{ $value->id }}][id]" value="1">
-                                                    <select name="details[{{ $value->id }}][tagihan_new_id]" class="form-select select2 tipe-tagihan">
+                                                    <select name="details[{{ $value->id }}][tagihan_new_id]" class="form-select select2 tipe-tagihan" @readonly(true)>
                                                         <option value="">-- Pilih Tagihan --</option>
                                                         @foreach ($details as $k2 => $v2)
                                                             <option value="{{ $v2->id }}" data-type="{{ $v2->tipe_tagihan->key }}" @selected($v2->id == $value->tagihan_new_id)>{{ $v2->tipe_tagihan->nama }}</option>
@@ -124,7 +124,7 @@ Tambah Pembayaran
 
                                                     <div class="bulan" @if($value->bulan == null) style="display: none;" @endif>
                                                         <label for="bulan" class="form-label mt-3">Bulan</label>
-                                                        <select name="details[{{ $value->id }}][bulan]" class="form-select select2">
+                                                        <select name="details[{{ $value->id }}][bulan]" class="form-select select2" @readonly(true)>
                                                             <option value="">-- Pilih Bulan --</option>
                                                             <option value="7" @selected($value->bulan == 7)>Juli {{ $thisYear }}</option>
                                                             <option value="8" @selected($value->bulan == 8)>Agustus {{ $thisYear }}</option>
@@ -161,7 +161,7 @@ Tambah Pembayaran
                                         @endforelse
                                     </tbody>
                                 </table>
-                                <button type="button" class="btn btn-primary mt-3" id="addRow"><i class="fas fa-plus"></i> Tambah Baris</button>
+                                {{-- <button type="button" class="btn btn-primary mt-3" id="addRow"><i class="fas fa-plus"></i> Tambah Baris</button> --}}
                             </div>
                         </div>
                     </div>

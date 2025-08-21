@@ -269,10 +269,30 @@ Tambah Pembayaran
         let jumlah    = container.find('.jumlah');
 
         if(type == 'spp') {
-            if(jenjang == 1 && bulan == 7) {
-                bayar.val(0);
-                potongan.val(0);
-                jumlah.val(0);
+            if(jenjang == 1) {
+                if(bulan == 7){
+                    bayar.val(0);
+                    potongan.val(0);
+                    jumlah.val(0);
+                }else{
+                    sumPotongan = parseFloat($(`#potongan-${tagihanId}`).val()) / 11;
+                    sumBayar = parseFloat($(`#total-${tagihanId}`).val()) / 11;
+
+                    sumBayar = sumBayar - sumPotongan;
+
+                    bayar.val(sumBayar);
+                    potongan.val(sumPotongan);
+                    jumlah.val(sumBayar + sumPotongan);
+                }
+            }else{
+                sumPotongan = parseFloat($(`#potongan-${tagihanId}`).val()) / 12;
+                sumBayar = parseFloat($(`#total-${tagihanId}`).val()) / 12;
+
+                sumBayar = sumBayar - sumPotongan;
+
+                bayar.val(sumBayar);
+                potongan.val(sumPotongan);
+                jumlah.val(sumBayar + sumPotongan);
             }
         }
     });
