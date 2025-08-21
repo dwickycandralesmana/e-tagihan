@@ -41,8 +41,8 @@ Tagihan
                         </div>
                         <div class="col-md-3 col-sm-12">
                             <div class="mb-3">
-                                <label class="form-label">Tahun Ajaran</label>
-                                <input type="text" class="form-control" value="{{ $tagihan->tahun_ajaran }}" readonly>
+                                <label class="form-label">Tahun Pelajaran</label>
+                                <input type="text" class="form-control" value="{{ $tagihan->tahun_ajaran }}/{{ $tagihan->tahun_ajaran + 1 }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-12">
@@ -60,6 +60,10 @@ Tagihan
                                     <th style="width: 5%">No</th>
                                     <th colspan="2">Rincian</th>
                                     <th>Jumlah Tagihan</th>
+                                    <th>Jumlah Potongan
+                                        <br>
+                                        <small class="text-muted">dihitung selama 12 bulan</small>
+                                    </th>
                                     <th>Jumlah Pembayaran <br> <small class="text-muted">(termasuk potongan)</small></th>
                                     <th>Sisa Tagihan</th>
                                 </thead>
@@ -67,6 +71,7 @@ Tagihan
                                     @php
                                         $totalBayar   = 0;
                                         $totalTagihan = 0;
+                                        $totalPotongan = 0;
                                     @endphp
 
                                     @forelse ($tagihan->tagihans as $key => $item)
@@ -90,10 +95,14 @@ Tagihan
                                             <td>
                                                 <input type="text" class="form-control number" name="total[{{ $item->id }}]" value="{{ $item->total }}" required>
                                             </td>
+                                            <td>
+                                                <input type="text" class="form-control number" name="potongan[{{ $item->id }}]" value="{{ $item->potongan }}" required>
+                                            </td>
                                             @php
                                                 $tempTotal = $item->pembayaran_details->sum('jumlah');
                                                 $totalBayar += $tempTotal;
                                                 $totalTagihan += $item->total;
+                                                $totalPotongan += $item->potongan;
                                             @endphp
 
                                             <td>
@@ -115,6 +124,9 @@ Tagihan
                                         </td>
                                         <td>
                                             <h3>{{ formatRp($totalTagihan) }}</h3>
+                                        </td>
+                                        <td>
+                                            <h3>{{ formatRp($totalPotongan) }}</h3>
                                         </td>
                                         <td>
                                             <h3>{{ formatRp($totalBayar) }}</h3>

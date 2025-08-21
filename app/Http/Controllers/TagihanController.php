@@ -109,6 +109,7 @@ class TagihanController extends BaseController
 
                 $tagihan->update([
                     'total' => $request->total[$item],
+                    'potongan' => $request->potongan[$item],
                     'deskripsi' => $deskripsi,
                 ]);
             }

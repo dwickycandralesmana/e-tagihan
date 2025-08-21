@@ -50,11 +50,11 @@ Edit Jenis Pembayaran
                         </div>
                         <div class="col-md-6 col-sm-12">
                             <div class="mb-3">
-                                <label for="tahun_ajaran" class="form-label fw-bold">Tahun Ajaran</label>
+                                <label for="tahun_ajaran" class="form-label fw-bold">Tahun Pelajaran</label>
                                 <select name="tahun_ajaran" id="tahun_ajaran" class="form-select @error('tahun_ajaran') is-invalid @enderror select2">
-                                    <option value="">-- Pilih Tahun Ajaran --</option>
+                                    <option value="">-- Pilih Tahun Pelajaran --</option>
                                     @for ($i = date('Y'); $i >= 2019; $i--)
-                                        <option value="{{ $i }}" @if ($i == $tipe->tahun_ajaran) selected @endif>{{ $i }}</option>
+                                        <option value="{{ $i }}" @if ($i == $tipe->tahun_ajaran) selected @endif>{{ $i }}/{{ $i + 1 }}</option>
                                     @endfor
                                 </select>
 

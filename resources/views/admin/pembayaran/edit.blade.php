@@ -45,8 +45,8 @@ Tambah Pembayaran
                         </div>
                         <div class="col-md-3 col-sm-12">
                             <div class="mb-3">
-                                <label class="form-label">Tahun Ajaran</label>
-                                <input type="text" class="form-control" value="{{ $historyKelas->tahun_ajaran }}" readonly>
+                                <label class="form-label">Tahun Pelajaran</label>
+                                <input type="text" class="form-control" value="{{ $historyKelas->tahun_ajaran }}/{{ $historyKelas->tahun_ajaran + 1 }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-12">
@@ -117,22 +117,27 @@ Tambah Pembayaran
                                                         @endforeach
                                                     </select>
 
+                                                    @php
+                                                        $thisYear = $historyKelas->tahun_ajaran;
+                                                        $nextYear = $thisYear + 1;
+                                                    @endphp
+
                                                     <div class="bulan" @if($value->bulan == null) style="display: none;" @endif>
                                                         <label for="bulan" class="form-label mt-3">Bulan</label>
                                                         <select name="details[{{ $value->id }}][bulan]" class="form-select select2">
                                                             <option value="">-- Pilih Bulan --</option>
-                                                            <option value="1" @selected($value->bulan == 1)>Januari</option>
-                                                            <option value="2" @selected($value->bulan == 2)>Februari</option>
-                                                            <option value="3" @selected($value->bulan == 3)>Maret</option>
-                                                            <option value="4" @selected($value->bulan == 4)>April</option>
-                                                            <option value="5" @selected($value->bulan == 5)>Mei</option>
-                                                            <option value="6" @selected($value->bulan == 6)>Juni</option>
-                                                            <option value="7" @selected($value->bulan == 7)>Juli</option>
-                                                            <option value="8" @selected($value->bulan == 8)>Agustus</option>
-                                                            <option value="9" @selected($value->bulan == 9)>September</option>
-                                                            <option value="10" @selected($value->bulan == 10)>Oktober</option>
-                                                            <option value="11" @selected($value->bulan == 11)>November</option>
-                                                            <option value="12" @selected($value->bulan == 12)>Desember</option>
+                                                            <option value="7" @selected($value->bulan == 7)>Juli {{ $thisYear }}</option>
+                                                            <option value="8" @selected($value->bulan == 8)>Agustus {{ $thisYear }}</option>
+                                                            <option value="9" @selected($value->bulan == 9)>September {{ $thisYear }}</option>
+                                                            <option value="10" @selected($value->bulan == 10)>Oktober {{ $thisYear }}</option>
+                                                            <option value="11" @selected($value->bulan == 11)>November {{ $thisYear }}</option>
+                                                            <option value="12" @selected($value->bulan == 12)>Desember {{ $thisYear }}</option>
+                                                            <option value="1" @selected($value->bulan == 1)>Januari {{ $nextYear }}</option>
+                                                            <option value="2" @selected($value->bulan == 2)>Februari {{ $nextYear }}</option>
+                                                            <option value="3" @selected($value->bulan == 3)>Maret {{ $nextYear }}</option>
+                                                            <option value="4" @selected($value->bulan == 4)>April {{ $nextYear }}</option>
+                                                            <option value="5" @selected($value->bulan == 5)>Mei {{ $nextYear }}</option>
+                                                            <option value="6" @selected($value->bulan == 6)>Juni {{ $nextYear }}</option>
                                                     </select>
                                                     </div>
                                                 </td>
@@ -199,6 +204,10 @@ Tambah Pembayaran
        });
     });
 
+    let paidMonth = @json($paidMonth);
+    let thisYear = {{ $historyKelas->tahun_ajaran }};
+    let nextYear = {{ $historyKelas->tahun_ajaran + 1 }};
+
     $(document).on('click', '#addRow', function() {
         let index = $('.tr-item').length;
         let random = Math.floor(Math.random() * 1000000);
@@ -220,19 +229,17 @@ Tambah Pembayaran
                         <label for="bulan" class="form-label mt-3">Bulan</label>
                         <select name="details[${random}][bulan]" class="form-select select2">
                             <option value="">-- Pilih Bulan --</option>
-                            <option value="1">Januari</option>
-                            <option value="2">Februari</option>
-                            <option value="3">Maret</option>
-                            <option value="4">April</option>
-                            <option value="5">Mei</option>
-                            <option value="6">Juni</option>
-                            <option value="7">Juli</option>
-                            <option value="8">Agustus</option>
-                            <option value="9">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Desember</option>
-                    </select>
+                            @foreach(range(7, 12) as $month)
+                                @if (!in_array($month, $paidMonth))
+                                    <option value="{{ $month }}">{{ \Carbon\Carbon::create()->month($month)->locale('id')->translatedFormat('F') }} ${thisYear}</option>
+                                @endif
+                            @endforeach
+                            @foreach(range(1, 6) as $month)
+                                @if (!in_array($month, $paidMonth))
+                                    <option value="{{ $month }}">{{ \Carbon\Carbon::create()->month($month)->locale('id')->translatedFormat('F') }} ${nextYear}</option>
+                                @endif
+                            @endforeach
+                        </select>
                     </div>
                 </td>
                 <td>

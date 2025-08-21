@@ -14,6 +14,7 @@ class TagihanNew extends Model
         'siswa_id',
         'tipe_tagihan_id',
         'total',
+        'potongan',
         'deskripsi',
     ];
 

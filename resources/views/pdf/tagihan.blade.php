@@ -93,9 +93,9 @@
                     <td>{{ $tagihan->kelas }}</td>
                 </tr>
                 <tr>
-                    <td width="100">Tahun Ajaran</td>
+                    <td width="100">Tahun Pelajaran</td>
                     <td>:</td>
-                    <td>{{ $tagihan->tahun_ajaran }}</td>
+                    <td>{{ $tagihan->tahun_ajaran }}/{{ $tagihan->tahun_ajaran + 1 }}</td>
                 </tr>
             </table>
             <br>

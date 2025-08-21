@@ -44,8 +44,8 @@ Tambah Pembayaran
                         </div>
                         <div class="col-md-3 col-sm-12">
                             <div class="mb-3">
-                                <label class="form-label">Tahun Ajaran</label>
-                                <input type="text" class="form-control" value="{{ $historyKelas->tahun_ajaran }}" readonly>
+                                <label class="form-label">Tahun Pelajaran</label>
+                                <input type="text" class="form-control" value="{{ $historyKelas->tahun_ajaran }}/{{ $historyKelas->tahun_ajaran + 1 }}" readonly>
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-12">
@@ -148,6 +148,10 @@ Tambah Pembayaran
        });
     });
 
+    let paidMonth = @json($paidMonth);
+    let thisYear = {{ $historyKelas->tahun_ajaran }};
+    let nextYear = {{ $historyKelas->tahun_ajaran + 1 }};
+
     $(document).on('click', '#addRow', function() {
         let index = $('.tr-item').length;
         let random = Math.floor(Math.random() * 1000000);
@@ -161,27 +165,37 @@ Tambah Pembayaran
                     <select name="details[${random}][tagihan_new_id]" class="form-select select2 tipe-tagihan">
                         <option value="">-- Pilih Tagihan --</option>
                         @foreach ($details as $key => $value)
-                            <option value="{{ $value->id }}" data-type="{{ $value->tipe_tagihan->key }}">{{ $value->tipe_tagihan->nama }}</option>
+                            <option value="{{ $value->id }}" data-type="{{ $value->tipe_tagihan->key }}">
+                                {{ $value->tipe_tagihan->nama }}
+                            </option>
                         @endforeach
                     </select>
+
+                    @foreach($details as $key => $value)
+                        <div class="form-group kekurangan-container" id="kekurangan-{{ $value->id }}" style="display: none;">
+                            <label for="kekurangan" class="form-label mt-3">Kekurangan {{ $value->tipe_tagihan->nama }}</label>
+                            <input type="text" name="details[${random}][kekurangan]" class="form-control kekurangan number" value="{{ $value->total - $value->pembayaran_details->sum('jumlah') }}">
+                        </div>
+
+                        <input type="hidden" name="placeholder[${random}][total]" id="total-{{ $value->id }}" value="{{ $value->total }}">
+                        <input type="hidden" name="placeholder[${random}][potongan]" id="potongan-{{ $value->id }}" value="{{ $value->potongan }}">
+                    @endforeach
 
                     <div class="bulan" style="display: none;">
                         <label for="bulan" class="form-label mt-3">Bulan</label>
                         <select name="details[${random}][bulan]" class="form-select select2">
                             <option value="">-- Pilih Bulan --</option>
-                            <option value="1">Januari</option>
-                            <option value="2">Februari</option>
-                            <option value="3">Maret</option>
-                            <option value="4">April</option>
-                            <option value="5">Mei</option>
-                            <option value="6">Juni</option>
-                            <option value="7">Juli</option>
-                            <option value="8">Agustus</option>
-                            <option value="9">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Desember</option>
-                    </select>
+                            @foreach(range(7, 12) as $month)
+                                @if (!in_array($month, $paidMonth))
+                                    <option value="{{ $month }}">{{ \Carbon\Carbon::create()->month($month)->locale('id')->translatedFormat('F') }} ${thisYear}</option>
+                                @endif
+                            @endforeach
+                            @foreach(range(1, 6) as $month)
+                                @if (!in_array($month, $paidMonth))
+                                    <option value="{{ $month }}">{{ \Carbon\Carbon::create()->month($month)->locale('id')->translatedFormat('F') }} ${nextYear}</option>
+                                @endif
+                            @endforeach
+                        </select>
                     </div>
                 </td>
                 <td>
@@ -225,21 +239,73 @@ Tambah Pembayaran
         });
     });
 
+    $(document).on('change', '.bulan', function() {
+        let bulan = $(this).find('option:selected').val();
+        let container = $(this).closest('.tr-item');
+        let bayar     = container.find('.bayar');
+        let tagihanId = container.find('.tipe-tagihan').val();
+        let type      = container.find('.tipe-tagihan option:selected').data('type');
+
+        let jenjang   = '{{ $historyKelas->jenjang_id }}';
+        let potongan  = container.find('.potongan');
+        let jumlah    = container.find('.jumlah');
+
+        if(type == 'spp') {
+            if(jenjang == 1 && bulan == 7) {
+                bayar.val(0);
+                potongan.val(0);
+                jumlah.val(0);
+            }
+        }
+    });
+
     $(document).on('change', '.tipe-tagihan', function() {
         let type      = $(this).find('option:selected').data('type');
         let container = $(this).closest('.tr-item');
         let bulan     = container.find('.bulan');
         bulan.find('select').val('').trigger('change');
 
+        let bayar    = 0;
+        let potongan = 0;
+
         if (type == 'spp') {
             bulan.show();
         } else {
             bulan.hide();
         }
+
+        let tagihanId = $(this).val();
+        $('.kekurangan-container').hide();
+        let kekurangan = $(`#kekurangan-${tagihanId}`).show();
+
+        let jenjang = '{{ $historyKelas->jenjang_id }}';
+        if(type == 'spp' || type == 'angsuran_ujian') {
+            if(jenjang == 1) {
+                potongan = $(`#potongan-${tagihanId}`).val() / 11;
+                bayar = $(`#total-${tagihanId}`).val() / 11;
+
+                bayar = bayar - potongan;
+            }else {
+                potongan = $(`#potongan-${tagihanId}`).val() / 12;
+                bayar = $(`#total-${tagihanId}`).val() / 12;
+
+                bayar = bayar - potongan;
+            }
+        }
+
+        if(bayar > 0) {
+            container.find('.bayar').val(bayar);
+        }
+
+        if(potongan > 0) {
+            container.find('.potongan').val(potongan);
+        }
+
+        let jumlah = (parseFloat(container.find('.bayar').val()) + parseFloat(container.find('.potongan').val()));
+        container.find('.jumlah').val(jumlah);
     });
 
     $('.btn-submit').on('click', function() {
-       //check if bulan visible but not selected yet
        let isValid = true;
        $('.bulan').each(function() {
            if ($(this).is(':visible') && $(this).find('select').val() == '') {

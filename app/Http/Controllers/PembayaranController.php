@@ -41,6 +41,10 @@ class PembayaranController extends BaseController
         $this->historyKelas = $historyKelas;
         $this->details      = $historyKelas->tagihans;
 
+        $this->paidMonth = PembayaranDetail::whereHas('pembayaran', function ($query) use ($historyKelas) {
+            $query->where('history_kelas_id', $historyKelas->id);
+        })->where('bulan', '!=', null)->pluck('bulan')->toArray();
+
         return view('admin.pembayaran.create', $this->data);
     }
 
@@ -139,9 +143,14 @@ class PembayaranController extends BaseController
             abort(403);
         }
 
-        $this->historyKelas = HistoryKelas::find($this->pembayaran->history_kelas_id);
+        $historyKelas       = HistoryKelas::find($this->pembayaran->history_kelas_id);
+        $this->historyKelas = $historyKelas;
         $this->details      = $this->historyKelas->tagihans;
-        $this->jenjang    = Jenjang::all();
+        $this->jenjang      = Jenjang::all();
+        $this->paidMonth    = PembayaranDetail::whereHas('pembayaran', function ($query) use ($historyKelas) {
+            $query->where('history_kelas_id', $historyKelas->id);
+        })->where('bulan', '!=', null)->pluck('bulan')->toArray();
+
 
         return view('admin.pembayaran.edit', $this->data);
     }

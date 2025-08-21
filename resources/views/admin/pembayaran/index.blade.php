@@ -26,11 +26,11 @@ Pembayaran
                 <div class="row">
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="tahun_ajaran" class="fw-bold">Tahun Ajaran</label>
+                            <label for="tahun_ajaran" class="fw-bold">Tahun Pelajaran</label>
                             <select name="tahun_ajaran" id="tahun_ajaran" class="form-control select2">
-                                <option value="">-- Pilih Tahun Ajaran --</option>
+                                <option value="">-- Pilih Tahun Pelajaran --</option>
                                 @for ($i = date('Y'); $i >= 2019; $i--)
-                                    <option value="{{ $i }}" @if ($i == getDefaultTA()) selected @endif>{{ $i }}</option>
+                                    <option value="{{ $i }}" @if ($i == getDefaultTA()) selected @endif>{{ $i }}/{{ $i + 1 }}</option>
                                 @endfor
                             </select>
 
@@ -42,7 +42,7 @@ Pembayaran
                             <table id="table" class="table table-striped" style="width: 100%">
                                 <thead>
                                     <th>No</th>
-                                    <th>Tahun Ajaran</th>
+                                    <th>Tahun Pelajaran</th>
                                     <th>Jenjang</th>
                                     <th>Nama</th>
                                     <th>Total Potongan</th>
