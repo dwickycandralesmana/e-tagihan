@@ -143,7 +143,6 @@
                                                 <small class="text-muted">dihitung selama 12 bulan</small>
                                             @endif
                                         </td>
-
                                     @endif
                                     <td>
                                         {{ formatRp($item->total) }}
@@ -166,6 +165,81 @@
                                         {{ formatRp($item->total - ($tempTotal + $tempPotongan)) }}
                                     </td>
                                 </tr>
+
+                                @if(in_array($item->tipe_tagihan->key, ['angsuran_ujian', 'spp']))
+                                    @php
+                                        $thisYear = $tagihan->tahun_ajaran;
+                                        $nextYear = $tagihan->tahun_ajaran + 1;
+                                        \Carbon\Carbon::setLocale('id');
+
+                                        $tagihanPerBulan = $item->total / 12;
+
+                                        if($item->tipe_tagihan->key == 'spp' && $item->tipe_tagihan->jenjang_id == 1){
+                                            $tagihanPerBulan = $item->total / 11;
+                                        }
+                                    @endphp
+                                    @for($i = 7; $i <= 12; $i++)
+                                        @php
+                                            $details = $item->pembayaran_details->where('bulan', $i)->where('key', $item->tipe_tagihan->key);
+                                        @endphp
+
+                                        <tr>
+                                            <td></td>
+                                            <td colspan="2"> {{ \Carbon\Carbon::parse("$thisYear-$i-01")->translatedFormat('F') }} {{ $thisYear }}</td>
+                                            <td>
+                                                @php
+                                                    if($item->tipe_tagihan->key == 'spp' && $item->tipe_tagihan->jenjang_id == 1 && $i == 7){
+                                                        $tempTagihan = 0;
+                                                    }else{
+                                                        $tempTagihan = $tagihanPerBulan;
+                                                    }
+                                                @endphp
+
+                                                {{ formatRp($tempTagihan) }}
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $tempTotal = $details->sum('bayar');
+                                                    $tempPotongan = $details->sum('potongan');
+                                                @endphp
+
+                                                {{ formatRp($tempTotal) }}
+                                            </td>
+                                            <td>
+                                                {{ formatRp($tempPotongan) }}
+                                            </td>
+                                            <td>
+                                                {{ formatRp($tagihanPerBulan - ($tempTotal + $tempPotongan)) }}
+                                            </td>
+                                        </tr>
+                                    @endfor
+
+                                    @for($i = 1; $i <= 6; $i++)
+                                        @php
+                                            $details = $item->pembayaran_details->where('bulan', $i)->where('key', $item->tipe_tagihan->key);
+                                        @endphp
+
+                                        <tr>
+                                            <td></td>
+                                            <td colspan="2"> {{ \Carbon\Carbon::parse("$nextYear-$i-01")->translatedFormat('F') }} {{ $nextYear }}</td>
+                                            <td>{{ formatRp($tagihanPerBulan) }}</td>
+                                            <td>
+                                                @php
+                                                    $tempTotal = $details->sum('bayar');
+                                                    $tempPotongan = $details->sum('potongan');
+                                                @endphp
+
+                                                {{ formatRp($tempTotal) }}
+                                            </td>
+                                            <td>
+                                                {{ formatRp($tempPotongan) }}
+                                            </td>
+                                            <td>
+                                                {{ formatRp($tagihanPerBulan - ($tempTotal + $tempPotongan)) }}
+                                            </td>
+                                        </tr>
+                                    @endfor
+                                @endif
                             @empty
                                 <tr>
                                     <td colspan="6">Data tidak ditemukan</td>

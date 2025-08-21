@@ -43,6 +43,7 @@ Pembayaran
                                 <thead>
                                     <th>No</th>
                                     <th>Tahun Pelajaran</th>
+                                    <th>Tanggal Pembayaran</th>
                                     <th>Jenjang</th>
                                     <th>Nama</th>
                                     <th>Total Potongan</th>
@@ -83,6 +84,7 @@ Pembayaran
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-start'},
                 {data: 'tahun_ajaran', name: 'tahun_ajaran', className: 'text-start'},
+                {data: 'tanggal_pembayaran', name: 'tanggal_pembayaran', className: 'text-start'},
                 {data: 'kelas.jenjang.nama', name: 'kelas.jenjang.nama', className: 'text-start'},
                 {data: 'kelas.siswa.nama', name: 'kelas.siswa.nama'},
                 {data: 'total_potongan', name: 'total_potongan'},
