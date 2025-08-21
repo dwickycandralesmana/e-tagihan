@@ -126,6 +126,13 @@
             content: " *";
             color: red;
         }
+
+        select[readonly].select2-hidden-accessible + .select2-container {
+            pointer-events: none;
+            touch-action: none;
+            opacity:0.6;
+            cursor:no-drop;
+        }
     </style>
 
     @yield('styles')

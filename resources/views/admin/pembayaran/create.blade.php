@@ -59,7 +59,7 @@ Tambah Pembayaran
                         <div class="col-md-6 col-sm-12">
                             <div class="mb-3">
                                 <label for="tanggal_pembayaran" class="form-label fw-bold">Tanggal Bayar</label>
-                                <input type="date" class="form-control @error('tanggal_pembayaran') is-invalid @enderror" id="tanggal_pembayaran" name="tanggal_pembayaran" value="{{ old('tanggal_pembayaran') }}">
+                                <input type="date" class="form-control @error('tanggal_pembayaran') is-invalid @enderror" id="tanggal_pembayaran" name="tanggal_pembayaran" value="{{ old('tanggal_pembayaran', date('Y-m-d')) }}">
 
                                 @error('tanggal_pembayaran')
                                     <div class="invalid-feedback">
@@ -71,7 +71,7 @@ Tambah Pembayaran
                         <div class="col-md-6 col-sm-12">
                             <div class="mb-3">
                                 <label for="metode_pembayaran" class="form-label fw-bold">Metode Pembayaran</label>
-                                <select name="metode_pembayaran" id="metode_pembayaran" class="form-select @error('metode_pembayaran') is-invalid @enderror select2">
+                                <select name="metode_pembayaran" id="metode_pembayaran" class="form-select @error('metode_pembayaran') is-invalid @enderror select2" required>
                                     <option value="">-- Pilih Metode Pembayaran --</option>
                                     <option value="Cash" {{ old('metode_pembayaran') == 'Cash' ? 'selected' : '' }}>Cash</option>
                                     <option value="Transfer" {{ old('metode_pembayaran') == 'Transfer' ? 'selected' : '' }}>Transfer</option>
@@ -111,7 +111,7 @@ Tambah Pembayaran
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-success btn-submit" type="submit"><i class="fas fa-check"></i> Simpan</button>
+                    <button class="btn btn-success btn-submit" type="button"><i class="fas fa-check"></i> Simpan</button>
                     <a href="{{ route('pembayaran.index') }}" class="btn btn-secondary"><i class="fas fa-times"></i> Batal</a>
                 </div>
             </form>
@@ -148,9 +148,10 @@ Tambah Pembayaran
        });
     });
 
-    let paidMonth = @json($paidMonth);
-    let thisYear = {{ $historyKelas->tahun_ajaran }};
-    let nextYear = {{ $historyKelas->tahun_ajaran + 1 }};
+    let paidMonth         = @json($paidMonth);
+    let paidMonthAngsuran = @json($paidMonthAngsuran);
+    let thisYear          = {{ $historyKelas->tahun_ajaran }};
+    let nextYear          = {{ $historyKelas->tahun_ajaran + 1 }};
 
     $(document).on('click', '#addRow', function() {
         let index = $('.tr-item').length;
@@ -192,6 +193,23 @@ Tambah Pembayaran
                             @endforeach
                             @foreach(range(1, 6) as $month)
                                 @if (!in_array($month, $paidMonth))
+                                    <option value="{{ $month }}">{{ \Carbon\Carbon::create()->month($month)->locale('id')->translatedFormat('F') }} ${nextYear}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="bulan-angsuran" style="display: none;">
+                        <label for="bulan" class="form-label mt-3">Bulan</label>
+                        <select name="details[${random}][bulan_angsuran]" class="form-select select2">
+                            <option value="">-- Pilih Bulan --</option>
+                            @foreach(range(7, 12) as $month)
+                                @if (!in_array($month, $paidMonthAngsuran))
+                                    <option value="{{ $month }}">{{ \Carbon\Carbon::create()->month($month)->locale('id')->translatedFormat('F') }} ${thisYear}</option>
+                                @endif
+                            @endforeach
+                            @foreach(range(1, 6) as $month)
+                                @if (!in_array($month, $paidMonthAngsuran))
                                     <option value="{{ $month }}">{{ \Carbon\Carbon::create()->month($month)->locale('id')->translatedFormat('F') }} ${nextYear}</option>
                                 @endif
                             @endforeach
@@ -260,10 +278,13 @@ Tambah Pembayaran
     });
 
     $(document).on('change', '.tipe-tagihan', function() {
-        let type      = $(this).find('option:selected').data('type');
-        let container = $(this).closest('.tr-item');
-        let bulan     = container.find('.bulan');
+        let type          = $(this).find('option:selected').data('type');
+        let container     = $(this).closest('.tr-item');
+        let bulan         = container.find('.bulan');
+        let bulanAngsuran = container.find('.bulan-angsuran');
+
         bulan.find('select').val('').trigger('change');
+        bulanAngsuran.find('select').val('').trigger('change');
 
         let bayar    = 0;
         let potongan = 0;
@@ -274,9 +295,15 @@ Tambah Pembayaran
             bulan.hide();
         }
 
+        if (type == 'angsuran_ujian') {
+            bulanAngsuran.show();
+        } else {
+            bulanAngsuran.hide();
+        }
+
         let tagihanId = $(this).val();
-        $('.kekurangan-container').hide();
-        let kekurangan = $(`#kekurangan-${tagihanId}`).show();
+        container.find('.kekurangan-container').hide();
+        let kekurangan = container.find(`#kekurangan-${tagihanId}`).show();
 
         let jenjang = '{{ $historyKelas->jenjang_id }}';
         if(type == 'spp' || type == 'angsuran_ujian') {
@@ -319,6 +346,27 @@ Tambah Pembayaran
                icon: 'error',
                title: 'Gagal',
                text: 'Harap pilih bulan untuk tagihan yang terpilih!',
+           });
+           return false;
+       }
+
+       //get visible bulan
+       let bulan = [];
+       $('.bulan:visible select').each(function() {
+           bulan.push($(this).val());
+       });
+
+
+       //check duplicate bulan
+       let uniqueBulan = bulan.filter((value, index, self) => {
+           return self.indexOf(value) === index;
+       });
+
+       if(uniqueBulan.length < bulan.length) {
+           Swal.fire({
+               icon: 'error',
+               title: 'Gagal',
+               text: 'Bulan yang dipilih tidak boleh sama!',
            });
            return false;
        }

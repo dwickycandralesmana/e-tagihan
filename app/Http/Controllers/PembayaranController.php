@@ -7,6 +7,7 @@ use App\Models\HistoryKelas;
 use App\Models\Jenjang;
 use App\Models\Pembayaran;
 use App\Models\PembayaranDetail;
+use App\Models\TagihanNew;
 use App\Models\TipeTagihan;
 use App\Models\User;
 use Exception;
@@ -43,7 +44,19 @@ class PembayaranController extends BaseController
 
         $this->paidMonth = PembayaranDetail::whereHas('pembayaran', function ($query) use ($historyKelas) {
             $query->where('history_kelas_id', $historyKelas->id);
-        })->where('bulan', '!=', null)->pluck('bulan')->toArray();
+        })
+            ->where('bulan', '!=', null)
+            ->where('key', '!=', 'angsuran_ujian')
+            ->pluck('bulan')
+            ->toArray();
+
+        $this->paidMonthAngsuran = PembayaranDetail::whereHas('pembayaran', function ($query) use ($historyKelas) {
+            $query->where('history_kelas_id', $historyKelas->id);
+        })
+            ->where('bulan', '!=', null)
+            ->where('key', 'angsuran_ujian')
+            ->pluck('bulan')
+            ->toArray();
 
         return view('admin.pembayaran.create', $this->data);
     }
@@ -83,17 +96,21 @@ class PembayaranController extends BaseController
                 $potongan = (float)$value['potongan'] ?? 0;
                 $jumlah   = $bayar + $potongan;
 
-                $pembayaranDetail                 = new PembayaranDetail();
-                $pembayaranDetail->pembayaran_id  = $pembayaran->id;
-                $pembayaranDetail->tagihan_new_id = $value['tagihan_new_id'];
-                $pembayaranDetail->siswa_id       = $historyKelas->siswa_id;
-                $pembayaranDetail->jenjang_id     = $historyKelas->jenjang_id;
-                $pembayaranDetail->tahun_ajaran   = $historyKelas->tahun_ajaran;
-                $pembayaranDetail->bulan          = $value['bulan'] ?? null;
-                $pembayaranDetail->kelas          = $value['kelas'] ?? null;
-                $pembayaranDetail->bayar          = $bayar;
-                $pembayaranDetail->potongan       = $potongan;
-                $pembayaranDetail->jumlah         = $jumlah;
+                $tagihanNew = TagihanNew::with('tipe_tagihan')->find($value['tagihan_new_id']);
+
+                $pembayaranDetail                   = new PembayaranDetail();
+                $pembayaranDetail->pembayaran_id    = $pembayaran->id;
+                $pembayaranDetail->tagihan_new_id   = $value['tagihan_new_id'];
+                $pembayaranDetail->siswa_id         = $historyKelas->siswa_id;
+                $pembayaranDetail->jenjang_id       = $historyKelas->jenjang_id;
+                $pembayaranDetail->tahun_ajaran     = $historyKelas->tahun_ajaran;
+                $pembayaranDetail->bulan            = $value['bulan'] ?? ($value['bulan_angsuran'] ?? null);
+                $pembayaranDetail->kelas            = $value['kelas'] ?? null;
+                $pembayaranDetail->bayar            = $bayar;
+                $pembayaranDetail->potongan         = $potongan;
+                $pembayaranDetail->jumlah           = $jumlah;
+                $pembayaranDetail->key              = $tagihanNew->tipe_tagihan->key;
+                $pembayaranDetail->history_kelas_id = $historyKelas->id;
                 $pembayaranDetail->save();
 
                 $totalBayar += $bayar;
@@ -147,10 +164,22 @@ class PembayaranController extends BaseController
         $this->historyKelas = $historyKelas;
         $this->details      = $this->historyKelas->tagihans;
         $this->jenjang      = Jenjang::all();
-        $this->paidMonth    = PembayaranDetail::whereHas('pembayaran', function ($query) use ($historyKelas) {
-            $query->where('history_kelas_id', $historyKelas->id);
-        })->where('bulan', '!=', null)->pluck('bulan')->toArray();
 
+        $this->paidMonth = PembayaranDetail::whereHas('pembayaran', function ($query) use ($historyKelas) {
+            $query->where('history_kelas_id', $historyKelas->id);
+        })
+            ->where('bulan', '!=', null)
+            ->where('key', '!=', 'angsuran_ujian')
+            ->pluck('bulan')
+            ->toArray();
+
+        $this->paidMonthAngsuran = PembayaranDetail::whereHas('pembayaran', function ($query) use ($historyKelas) {
+            $query->where('history_kelas_id', $historyKelas->id);
+        })
+            ->where('bulan', '!=', null)
+            ->where('key', 'angsuran_ujian')
+            ->pluck('bulan')
+            ->toArray();
 
         return view('admin.pembayaran.edit', $this->data);
     }
@@ -192,17 +221,21 @@ class PembayaranController extends BaseController
                 $potongan = (float)$value['potongan'] ?? 0;
                 $jumlah   = $bayar + $potongan;
 
-                $pembayaranDetail                 = new PembayaranDetail();
-                $pembayaranDetail->pembayaran_id  = $pembayaran->id;
-                $pembayaranDetail->tagihan_new_id = $value['tagihan_new_id'];
-                $pembayaranDetail->siswa_id       = $historyKelas->siswa_id;
-                $pembayaranDetail->jenjang_id     = $historyKelas->jenjang_id;
-                $pembayaranDetail->tahun_ajaran   = $historyKelas->tahun_ajaran;
-                $pembayaranDetail->bulan          = $value['bulan'] ?? null;
-                $pembayaranDetail->kelas          = $value['kelas'] ?? null;
-                $pembayaranDetail->bayar          = $bayar;
-                $pembayaranDetail->potongan       = $potongan;
-                $pembayaranDetail->jumlah         = $jumlah;
+                $tagihanNew = TagihanNew::with('tipe_tagihan')->find($value['tagihan_new_id']);
+
+                $pembayaranDetail                   = new PembayaranDetail();
+                $pembayaranDetail->pembayaran_id    = $pembayaran->id;
+                $pembayaranDetail->tagihan_new_id   = $value['tagihan_new_id'];
+                $pembayaranDetail->siswa_id         = $historyKelas->siswa_id;
+                $pembayaranDetail->jenjang_id       = $historyKelas->jenjang_id;
+                $pembayaranDetail->tahun_ajaran     = $historyKelas->tahun_ajaran;
+                $pembayaranDetail->bulan            = $value['bulan'] ?? null;
+                $pembayaranDetail->kelas            = $value['kelas'] ?? null;
+                $pembayaranDetail->bayar            = $bayar;
+                $pembayaranDetail->potongan         = $potongan;
+                $pembayaranDetail->jumlah           = $jumlah;
+                $pembayaranDetail->key              = $tagihanNew->tipe_tagihan->key;
+                $pembayaranDetail->history_kelas_id = $historyKelas->id;
                 $pembayaranDetail->save();
             }
 
