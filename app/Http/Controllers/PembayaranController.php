@@ -276,7 +276,7 @@ class PembayaranController extends BaseController
     {
         DB::beginTransaction();
         try {
-            $tipe = TipeTagihan::findOrFail($id);
+            $tipe = Pembayaran::findOrFail($id);
             if ($tipe->created_by != auth()->user()->id) {
                 throw new Exception("Anda tidak memiliki izin untuk menghapus data ini");
             }
