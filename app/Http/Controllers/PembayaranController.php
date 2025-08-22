@@ -310,7 +310,7 @@ class PembayaranController extends BaseController
         $endDate = Carbon::createFromFormat('d/m/Y', $date[1])->format('Y-m-d');
 
         $data = Pembayaran::query()
-            ->with('kelas', 'kelas.siswa', 'kelas.jenjang', 'createdBy', 'updatedBy');
+            ->with('historyKelas', 'historyKelas.siswa', 'historyKelas.jenjang', 'createdBy', 'updatedBy');
 
         if ($request->has('tahun_ajaran') && $request->tahun_ajaran) {
             $data->where('tahun_ajaran', $request->tahun_ajaran);

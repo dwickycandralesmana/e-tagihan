@@ -84,5 +84,9 @@ function terbilang($x)
 
 function terbilangRupiah($x)
 {
+    if ($x == 0) {
+        return "Nol Rupiah";
+    }
+
     return terbilang($x) . " Rupiah";
 }
