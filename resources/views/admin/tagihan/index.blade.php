@@ -33,6 +33,17 @@ Tagihan
                                     <option value="{{ $i }}" @if ($i == getDefaultTA()) selected @endif>{{ $i }}/{{ $i + 1 }}</option>
                                 @endfor
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="kelas" class="fw-bold">Kelas</label>
+                            <select name="kelas" id="kelas" class="form-control select2">
+                                <option value="">-- Semua Kelas --</option>
+                                @foreach ($listKelas as $item)
+                                    <option value="{{ $item }}">{{ $item }}</option>
+                                @endforeach
+                            </select>
 
                             <button type="button" class="btn btn-primary mt-3 float-end" id="btnFilter">Filter</button>
                         </div>
@@ -121,6 +132,7 @@ Tagihan
                 url: "{{ route('tagihan.data') }}",
                 data: function (d) {
                     d.tahun_ajaran = $('#tahun_ajaran').val();
+                    d.kelas = $('#kelas').val();
                 }
             },
             columns: [

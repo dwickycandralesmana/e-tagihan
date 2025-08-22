@@ -23,7 +23,8 @@ class TagihanController extends BaseController
 
     public function index()
     {
-        $this->jenjang = Jenjang::all();
+        $this->jenjang   = Jenjang::all();
+        $this->listKelas = HistoryKelas::groupBy('kelas')->pluck('kelas');
 
         return view('admin.tagihan.index', $this->data);
     }
@@ -35,6 +36,10 @@ class TagihanController extends BaseController
 
         if ($request->tahun_ajaran) {
             $data->where('tahun_ajaran', $request->tahun_ajaran);
+        }
+
+        if ($request->kelas) {
+            $data->where('kelas', $request->kelas);
         }
 
         return DataTables::of($data)
