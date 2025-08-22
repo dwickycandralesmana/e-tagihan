@@ -9,7 +9,7 @@ class Pembayaran extends Model
 {
     use HasFactory;
 
-    public function kelas()
+    public function historyKelas()
     {
         return $this->belongsTo(HistoryKelas::class, 'history_kelas_id');
     }
@@ -27,5 +27,10 @@ class Pembayaran extends Model
     public function details()
     {
         return $this->hasMany(PembayaranDetail::class, 'pembayaran_id');
+    }
+
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'siswa_id');
     }
 }

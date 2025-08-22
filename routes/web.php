@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', IsAdmin::class])->group(function () {
+    Route::get('pembayaran/{id}/pdf', [PembayaranController::class, 'pdf'])->name('pembayaran.pdf');
     Route::get('pembayaran/data', [PembayaranController::class, 'data'])->name('pembayaran.data');
     Route::resource('pembayaran', PembayaranController::class);
 

@@ -40,7 +40,7 @@ if (!function_exists('decryptWithKey')) {
 
         // Convert URL-safe base64 back to regular base64
         $data = str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT);
-        
+
         $method = 'AES-256-CBC';
         list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
         return openssl_decrypt($encrypted_data, $method, $key, 0, $iv);
@@ -58,4 +58,31 @@ if (!function_exists('getDefaultTA')) {
 
         return date('Y', strtotime($date));
     }
+}
+
+function terbilang($x)
+{
+    $angka = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
+
+    if ($x < 12)
+        return " " . $angka[$x];
+    elseif ($x < 20)
+        return terbilang($x - 10) . " Belas";
+    elseif ($x < 100)
+        return terbilang($x / 10) . " Puluh" . terbilang($x % 10);
+    elseif ($x < 200)
+        return "Seratus" . terbilang($x - 100);
+    elseif ($x < 1000)
+        return terbilang($x / 100) . " Ratus" . terbilang($x % 100);
+    elseif ($x < 2000)
+        return "Seribu" . terbilang($x - 1000);
+    elseif ($x < 1000000)
+        return terbilang($x / 1000) . " Ribu" . terbilang($x % 1000);
+    elseif ($x < 1000000000)
+        return terbilang($x / 1000000) . " Juta" . terbilang($x % 1000000);
+}
+
+function terbilangRupiah($x)
+{
+    return terbilang($x) . " Rupiah";
 }

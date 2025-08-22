@@ -10,6 +10,7 @@ use App\Models\PembayaranDetail;
 use App\Models\TagihanNew;
 use App\Models\TipeTagihan;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 class PembayaranController extends BaseController
 {
@@ -78,6 +80,7 @@ class PembayaranController extends BaseController
             $historyKelas = HistoryKelas::find($request->history_kelas_id);
 
             $pembayaran                     = new Pembayaran();
+            $pembayaran->code               = date('Ymd') . strtoupper(Str::random(6));
             $pembayaran->siswa_id           = $historyKelas->siswa_id;
             $pembayaran->jenjang_id         = $historyKelas->jenjang_id;
             $pembayaran->tahun_ajaran       = $historyKelas->tahun_ajaran;
@@ -138,6 +141,8 @@ class PembayaranController extends BaseController
         }
 
         DB::commit();
+
+        return redirect()->route('pembayaran.pdf', $pembayaran->id)->with($notification);
 
         return redirect()->route('pembayaran.index')->with($notification);
     }
@@ -337,9 +342,19 @@ class PembayaranController extends BaseController
                     }
                 }
 
+                $html .= "<a href='" . route('pembayaran.pdf', $row->id) . "' target='_blank' class='btn btn-primary me-1 mb-1'><i class='fas fa-eye'></i> Bukti Bayar</a>";
+
                 return $html;
             })
             ->rawColumns(['action', 'status'])
             ->make(true);
+    }
+
+    public function pdf($id)
+    {
+        $pembayaran = Pembayaran::find($id);
+        $pdf = Pdf::loadView('admin.pembayaran.pdf', compact('pembayaran'));
+
+        return $pdf->stream('Bukti Pembayaran - ' . $pembayaran->siswa->nama . '.pdf');
     }
 }
