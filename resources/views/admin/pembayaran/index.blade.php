@@ -33,6 +33,12 @@ Pembayaran
                                     <option value="{{ $i }}" @if ($i == getDefaultTA()) selected @endif>{{ $i }}/{{ $i + 1 }}</option>
                                 @endfor
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="tanggal_pembayaran" class="fw-bold">Tanggal Pembayaran</label>
+                            <input type="text" name="tanggal_pembayaran" id="tanggal_pembayaran" class="form-control daterangepicer" value="{{ \Carbon\Carbon::now()->subDays(7)->format('d/m/Y') . ' - ' . \Carbon\Carbon::now()->format('d/m/Y') }}">
 
                             <button type="button" class="btn btn-primary mt-3 float-end" id="btnFilter">Filter</button>
                         </div>
@@ -67,6 +73,11 @@ Pembayaran
     $(document).ready(function() {
         $('.select2').select2();
         $('#liPembayaran').addClass('active');
+        $('.daterangepicer').daterangepicker({
+            locale: {
+                format: 'DD/MM/YYYY'
+            }
+        });
 
         let table = $("#table").DataTable({
             processing: true,
@@ -79,6 +90,7 @@ Pembayaran
                 url: "{{ route('pembayaran.data') }}",
                 data: function (d) {
                     d.tahun_ajaran = $('#tahun_ajaran').val();
+                    d.tanggal_pembayaran = $('#tanggal_pembayaran').val();
                 }
             },
             columns: [

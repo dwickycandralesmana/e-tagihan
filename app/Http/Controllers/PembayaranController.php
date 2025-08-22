@@ -10,6 +10,7 @@ use App\Models\PembayaranDetail;
 use App\Models\TagihanNew;
 use App\Models\TipeTagihan;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -299,11 +300,19 @@ class PembayaranController extends BaseController
 
     public function data(Request $request)
     {
+        $date = explode(" - ", $request->tanggal_pembayaran);
+        $startDate = Carbon::createFromFormat('d/m/Y', $date[0])->format('Y-m-d');
+        $endDate = Carbon::createFromFormat('d/m/Y', $date[1])->format('Y-m-d');
+
         $data = Pembayaran::query()
             ->with('kelas', 'kelas.siswa', 'kelas.jenjang', 'createdBy', 'updatedBy');
 
         if ($request->has('tahun_ajaran') && $request->tahun_ajaran) {
             $data->where('tahun_ajaran', $request->tahun_ajaran);
+        }
+
+        if ($request->has('tanggal_pembayaran') && $request->tanggal_pembayaran) {
+            $data->whereBetween('tanggal_pembayaran', [$startDate, $endDate]);
         }
 
         return DataTables::of($data)
