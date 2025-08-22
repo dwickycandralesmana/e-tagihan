@@ -52,6 +52,9 @@ Tagihan
                         <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modalImport">
                             <i class="fa fa-upload"></i> Import
                         </button>
+                        <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modalImportTunggakan">
+                            <i class="fa fa-upload"></i> Import Tunggakan
+                        </button>
                         <div class="table table-responsive">
                             <table id="table" class="table table-striped" style="width: 100%">
                                 <thead>
@@ -112,6 +115,45 @@ Tagihan
     </div>
 </div>
 
+<div class="modal modal-blur fade" id="modalImportTunggakan" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Import Tunggakan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('tagihan.import-tunggakan') }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label required">Jenjang</label>
+                        <select class="form-select" name="jenjang_id" required>
+                            <option value="">Pilih Jenjang</option>
+                            @foreach($jenjang as $item)
+                                <option value="{{ $item->id }}">{{ $item->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label required">File</label>
+                        <input type="file" class="form-control" name="file" required accept=".xlsx">
+                        <div class="form-text">File harus berupa .xlsx</div>
+                    </div>
+
+                    <a href="{{ asset('imports/template-tunggakan.xlsx') }}" class="btn btn-success"><i class="fas fa-file-excel"></i> Download Template</a>
+
+                    {{-- <div class="alert alert-warning">
+                        <strong>Perhatian!</strong> Pastikan file yang diupload sesuai dengan format yang telah ditentukan. Silahkan download formatnya terlebih dahulu dari <b>"Menu Jenjang".</b>
+                    </div> --}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 

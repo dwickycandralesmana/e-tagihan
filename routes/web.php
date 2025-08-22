@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     // Route::get('tagihan/{id}/show', [TagihanController::class, 'show'])->name('tagihan.show');
     // Route::get('tagihan', [TagihanController::class, 'tagihan'])->name('tagihan.index');
 
+    Route::post('tagihan/import-tunggakan', [TagihanController::class, 'importTunggakan'])->name('tagihan.import-tunggakan');
     Route::post('tagihan/import', [TagihanController::class, 'import'])->name('tagihan.import');
     Route::get('tagihan/data', [TagihanController::class, 'data'])->name('tagihan.data');
     Route::resource('tagihan', TagihanController::class);

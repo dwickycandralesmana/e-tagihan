@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Imports\TagihanImport;
+use App\Imports\TunggakanImport;
 use App\Models\HistoryKelas;
 use App\Models\Jenjang;
 use App\Models\Tagihan;
@@ -72,6 +73,32 @@ class TagihanController extends BaseController
         DB::beginTransaction();
         try {
             Excel::import(new TagihanImport($request->jenjang_id), $request->file('file'));
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            $notification = array(
+                'message'    => 'Data gagal disimpan',
+                'alert-type' => 'error'
+            );
+
+            return redirect()->back()->with($notification);
+        }
+
+        DB::commit();
+
+        $notification = array(
+            'message'    => 'Data berhasil disimpan',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->route('tagihan.index')->with($notification);
+    }
+
+    public function importTunggakan(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            Excel::import(new TunggakanImport($request->jenjang_id), $request->file('file'));
         } catch (\Exception $e) {
             DB::rollBack();
 
