@@ -52,7 +52,7 @@ Tagihan
                         <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modalImport">
                             <i class="fa fa-upload"></i> Import
                         </button>
-                        <button class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#modalImportTunggakan">
+                        <button class="btn btn-primary float-end me-2" data-bs-toggle="modal" data-bs-target="#modalImportTunggakan">
                             <i class="fa fa-upload"></i> Import Tunggakan
                         </button>
                         <div class="table table-responsive">
