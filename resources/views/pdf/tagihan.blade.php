@@ -120,6 +120,10 @@
                             @endphp
 
                             @forelse ($tagihan->tagihans as $key => $item)
+                                @if(!$item->tipe_tagihan->is_show && $item->total == 0)
+                                    @continue;
+                                @endif
+
                                 <input type="hidden" name="tagihan_id[]" value="{{ $item->id }}">
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
@@ -284,6 +288,12 @@
 
                             @endforelse
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="6" class="text-start fw-bold">Terbilang: <br> <i>{{ terbilangRupiah($totalTagihan) }}</i></td>
+                                <td class="fw-bold">{{ formatRp($totalTagihan) }}</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

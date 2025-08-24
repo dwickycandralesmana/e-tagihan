@@ -166,7 +166,7 @@
                 </ol>
             </p>
 
-            <div id="ttd">
+            {{-- <div id="ttd">
                 <table width="100%">
                     <tr>
                         <td width="70%"></td>
@@ -184,7 +184,7 @@
                         </td>
                     </tr>
                 </table>
-            </div>
+            </div> --}}
         </div>
     </div>
 </body>

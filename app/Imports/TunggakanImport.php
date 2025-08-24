@@ -42,7 +42,8 @@ class TunggakanImport implements ToCollection, WithHeadingRow
                 continue;
             }
 
-            $tagihanNew->potongan = $row['potongan'];
+            $tagihanNew->total     = $row['total'];
+            $tagihanNew->potongan  = $row['potongan'];
             $tagihanNew->deskripsi = $row['deskripsi'];
             $tagihanNew->save();
         }
