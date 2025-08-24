@@ -196,7 +196,7 @@ class UserController extends BaseController
     public function data(Request $request)
     {
         $data = User::query()
-            ->whereType('user');
+            ->whereType('bendahara');
 
         return DataTables::of($data)
             ->addIndexColumn()

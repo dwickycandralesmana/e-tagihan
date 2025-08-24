@@ -299,7 +299,7 @@ class PembayaranController extends BaseController
 
         $notification = array(
             'status' => true,
-            'message' => 'Data user berhasil dihapus!',
+            'message' => 'Data berhasil dihapus!',
         );
 
         return response()->json($notification);

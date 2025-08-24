@@ -29,7 +29,7 @@ User
                             <i class="fa fa-plus"></i> Tambah User
                         </a>
 
-                        <button type="button" id="btnImport" class="btn btn-success me-1 float-end" data-bs-toggle="modal" data-bs-target="#modalImport"><i class="fas fa-file-import"></i> Import</button>
+                        {{-- <button type="button" id="btnImport" class="btn btn-success me-1 float-end" data-bs-toggle="modal" data-bs-target="#modalImport"><i class="fas fa-file-import"></i> Import</button> --}}
                     </div>
                     <div class="col-12">
                         <div class="table table-responsive">
@@ -37,11 +37,7 @@ User
                                 <thead>
                                     <th>No</th>
                                     <th>Nama</th>
-                                    <th>Nomor HP</th>
-                                    <th>Alamat</th>
-                                    <th>Tempat Lahir</th>
-                                    <th>Tanggal Lahir</th>
-                                    <th>Jenis Kelamin</th>
+                                    <th>Email</th>
                                     <th>Aksi</th>
                                 </thead>
                             </table>
@@ -99,11 +95,7 @@ User
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: true, searchable: false},
                 {data: 'name', name: 'name'},
-                {data: 'nomor_hp', name: 'nomor_hp'},
-                {data: 'alamat', name: 'alamat'},
-                {data: 'tempat_lahir', name: 'tempat_lahir'},
-                {data: 'tanggal_lahir', name: 'tanggal_lahir'},
-                {data: 'jenis_kelamin', name: 'jenis_kelamin'},
+                {data: 'email', name: 'email'},
                 {data: 'action', name: 'action', orderable: false, searchable: false, width: '30%'},
             ],
         });
