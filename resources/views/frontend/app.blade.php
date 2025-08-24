@@ -21,7 +21,7 @@
     <link href="{{ asset('tabler/dist/css/tabler-payments.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('tabler/dist/css/tabler-vendors.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('tabler/dist/css/demo.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('plugins/datatables/datatables2.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/jquery/datatables.min.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }} ">
     <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.min.css') }} ">
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }} ">
@@ -98,7 +98,7 @@
     </div>
     <script src="{{ asset('tabler/dist/js/tabler.min.js') }}"></script>
     <script src="{{ asset('tabler/dist/js/demo.min.js') }}"></script>
-    <script src="{{ asset('plugins/datatables/datatables2.min.js') }}"></script>
+    <script src="{{ asset('plugins/jquery/datatables.min.js') }}"></script>
     <script src="{{ asset('plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('plugins/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('plugins/robinherbots/inputmask.min.js') }}"></script>
