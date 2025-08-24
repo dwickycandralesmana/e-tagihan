@@ -101,6 +101,8 @@ class PembayaranController extends BaseController
                 $jumlah   = $bayar + $potongan;
 
                 $tagihanNew = TagihanNew::with('tipe_tagihan')->find($value['tagihan_new_id']);
+                $tagihanNew->deskripsi = $value['deskripsi'] ?? null;
+                $tagihanNew->save();
 
                 $pembayaranDetail                   = new PembayaranDetail();
                 $pembayaranDetail->pembayaran_id    = $pembayaran->id;

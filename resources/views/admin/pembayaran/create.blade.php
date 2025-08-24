@@ -166,7 +166,7 @@ Tambah Pembayaran
                     <select name="details[${random}][tagihan_new_id]" class="form-select select2 tipe-tagihan">
                         <option value="">-- Pilih Tagihan --</option>
                         @foreach ($details as $key => $value)
-                            <option value="{{ $value->id }}" data-type="{{ $value->tipe_tagihan->key }}">
+                            <option value="{{ $value->id }}" data-type="{{ $value->tipe_tagihan->key }}" data-deskripsi="{{ $value->deskripsi }}">
                                 {{ $value->tipe_tagihan->nama }}
                             </option>
                         @endforeach
@@ -214,6 +214,11 @@ Tambah Pembayaran
                                 @endif
                             @endforeach
                         </select>
+                    </div>
+
+                    <div class="deskripsi-tunggakan" style="display: none;">
+                        <label for="deskripsi" class="form-label mt-3">Deskripsi Tunggakan</label>
+                        <input type="text" name="details[${random}][deskripsi]" class="form-control deskripsi">
                     </div>
                 </td>
                 <td>
@@ -298,13 +303,17 @@ Tambah Pembayaran
     });
 
     $(document).on('change', '.tipe-tagihan', function() {
-        let type          = $(this).find('option:selected').data('type');
-        let container     = $(this).closest('.tr-item');
-        let bulan         = container.find('.bulan');
-        let bulanAngsuran = container.find('.bulan-angsuran');
+        let type               = $(this).find('option:selected').data('type');
+        let container          = $(this).closest('.tr-item');
+        let bulan              = container.find('.bulan');
+        let bulanAngsuran      = container.find('.bulan-angsuran');
+        let deskripsiTunggakan = container.find('.deskripsi-tunggakan');
+        let deskripsi          = $(this).find('option:selected').data('deskripsi');
 
         bulan.find('select').val('').trigger('change');
         bulanAngsuran.find('select').val('').trigger('change');
+        deskripsiTunggakan.hide();
+        deskripsiTunggakan.find('.deskripsi').val('');
 
         let bayar    = 0;
         let potongan = 0;
@@ -319,6 +328,11 @@ Tambah Pembayaran
             bulanAngsuran.show();
         } else {
             bulanAngsuran.hide();
+        }
+
+        if(['tunggakan_kelas_x', 'tunggakan_kelas_xi'].includes(type)) {
+            deskripsiTunggakan.show();
+            deskripsiTunggakan.find('.deskripsi').val(deskripsi);
         }
 
         let tagihanId = $(this).val();
@@ -417,6 +431,15 @@ Tambah Pembayaran
                icon: 'error',
                title: 'Gagal',
                text: 'Harap isi jumlah tagihan!',
+           });
+           return false;
+       }
+
+       if($('#metode_pembayaran').val() == '') {
+           Swal.fire({
+               icon: 'error',
+               title: 'Gagal',
+               text: 'Harap pilih metode pembayaran!',
            });
            return false;
        }

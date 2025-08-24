@@ -138,7 +138,12 @@ Tambah Pembayaran
                                                             <option value="4" @selected($value->bulan == 4)>April {{ $nextYear }}</option>
                                                             <option value="5" @selected($value->bulan == 5)>Mei {{ $nextYear }}</option>
                                                             <option value="6" @selected($value->bulan == 6)>Juni {{ $nextYear }}</option>
-                                                    </select>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="deskripsi-tunggakan" @if(!in_array($value->tagihanNew->tipe_tagihan->key, ['tunggakan_kelas_x', 'tunggakan_kelas_xi'])) style="display: none;" @endif>
+                                                        <label for="deskripsi" class="form-label mt-3">Deskripsi Tunggakan</label>
+                                                        <input type="text" name="details[{{ $value->id }}][deskripsi]" class="form-control deskripsi" value="{{ $value->deskripsi }}" @readonly(true)>
                                                     </div>
                                                 </td>
                                                 <td>
