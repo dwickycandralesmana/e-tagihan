@@ -52,6 +52,7 @@ Pembayaran
                                     <th>Tanggal Pembayaran</th>
                                     <th>Jenjang</th>
                                     <th>Nama</th>
+                                    <th>Detail Pembayaran</th>
                                     <th>Total Potongan</th>
                                     <th>Total Bayar</th>
                                     <th>Dibuat Oleh</th>
@@ -80,8 +81,8 @@ Pembayaran
         });
 
         let table = $("#table").DataTable({
-            processing: true,
-            serverSide: true,
+            processing: false,
+            serverSide: false,
             columnDefs: [{
                 defaultContent: "-",
                 targets       : "_all"
@@ -99,6 +100,7 @@ Pembayaran
                 {data: 'tanggal_pembayaran', name: 'tanggal_pembayaran', className: 'text-start'},
                 {data: 'history_kelas.jenjang.nama', name: 'history_kelas.jenjang.nama', className: 'text-start'},
                 {data: 'history_kelas.siswa.nama', name: 'history_kelas.siswa.nama'},
+                {data: 'details', name: 'details', orderable: false, searchable: false},
                 {data: 'total_potongan', name: 'total_potongan'},
                 {data: 'total_bayar', name: 'total_bayar'},
                 {data: 'created_by.name', name: 'created_by.name'},

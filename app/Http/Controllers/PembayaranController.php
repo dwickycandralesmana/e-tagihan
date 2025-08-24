@@ -331,6 +331,14 @@ class PembayaranController extends BaseController
             ->editColumn('total_potongan', function ($row) {
                 return formatRp($row->total_potongan);
             })
+            ->addColumn('details', function ($row) {
+                return $row->details->map(function ($detail) {
+                    $year = $detail->bulan >= 1 && $detail->bulan <= 6 ? $detail->tahun_ajaran + 1 : $detail->tahun_ajaran;
+                    $bulan = $detail->bulan ? " - " . Carbon::parse($year . '-' . $detail->bulan . '-01')->format('M') : "";
+
+                    return $detail->tagihanNew->tipe_tagihan->nama . $bulan . " " . $year;
+                })->implode(', ');
+            })
             ->addColumn('action', function ($row) {
                 $html = "";
 
