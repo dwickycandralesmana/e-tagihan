@@ -58,6 +58,7 @@ class JenisPembayaranController extends BaseController
             $tipe->jenjang_id   = $request->jenjang_id;
             $tipe->tahun_ajaran = $request->tahun_ajaran;
             $tipe->total        = $request->total;
+            $tipe->is_show      = $request->is_show;
             $tipe->save();
 
             $kelas = HistoryKelas::where('jenjang_id', $request->jenjang_id)->where('tahun_ajaran', $request->tahun_ajaran)->get();
@@ -131,6 +132,7 @@ class JenisPembayaranController extends BaseController
             $tipe->jenjang_id   = $request->jenjang_id;
             $tipe->tahun_ajaran = $request->tahun_ajaran;
             $tipe->total        = $request->total;
+            $tipe->is_show      = $request->is_show;
             $tipe->save();
 
             $notification = array(

@@ -89,6 +89,21 @@ Edit Jenis Pembayaran
                                 @enderror
                             </div>
                         </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="mb-3">
+                                <label for="is_show" class="form-label fw-bold">Tampilkan jika total tagihan 0 Rupiah?</label>
+                                <select name="is_show" id="is_show" class="form-select @error('is_show') is-invalid @enderror select2">
+                                    <option value="1" {{ $tipe->is_show == 1 ? 'selected' : '' }}>Ya</option>
+                                    <option value="0" {{ $tipe->is_show == 0 ? 'selected' : '' }}>Tidak</option>
+                                </select>
+
+                                @error('is_show')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer">
