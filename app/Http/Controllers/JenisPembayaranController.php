@@ -48,6 +48,7 @@ class JenisPembayaranController extends BaseController
             'nama'         => 'required',
             'jenjang_id'   => 'required',
             'tahun_ajaran' => 'required',
+            'key'          => 'required',
             'total'        => 'required',
         ]);
 
@@ -57,6 +58,7 @@ class JenisPembayaranController extends BaseController
             $tipe->nama         = $request->nama;
             $tipe->jenjang_id   = $request->jenjang_id;
             $tipe->tahun_ajaran = $request->tahun_ajaran;
+            $tipe->key          = $request->key;
             $tipe->total        = $request->total;
             $tipe->is_show      = $request->is_show;
             $tipe->save();
@@ -131,6 +133,7 @@ class JenisPembayaranController extends BaseController
             $tipe->nama         = $request->nama;
             $tipe->jenjang_id   = $request->jenjang_id;
             $tipe->tahun_ajaran = $request->tahun_ajaran;
+            $tipe->key          = $request->key;
             $tipe->total        = $request->total;
             $tipe->is_show      = $request->is_show;
             $tipe->save();
