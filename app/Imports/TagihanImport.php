@@ -43,7 +43,12 @@ class TagihanImport implements ToCollection, WithHeadingRow
                 continue;
             }
 
-            $historyKelas               = new HistoryKelas();
+            $historyKelas               = HistoryKelas::firstOrNew([
+                'siswa_id'     => $siswa->id,
+                'jenjang_id'   => $this->jenjang_id,
+                'tahun_ajaran' => $row['tahun_ajaran'],
+            ]);
+
             $historyKelas->siswa_id     = $siswa->id;
             $historyKelas->jenjang_id   = $this->jenjang_id;
             $historyKelas->tahun_ajaran = $row['tahun_ajaran'];
@@ -53,7 +58,14 @@ class TagihanImport implements ToCollection, WithHeadingRow
             $tipeTagihan = TipeTagihan::where('tahun_ajaran', $row['tahun_ajaran'])->where('jenjang_id', $this->jenjang_id)->get();
 
             foreach ($tipeTagihan as $tipe) {
-                $tagihan                   = new TagihanNew();
+                $tagihan                   = TagihanNew::updateOrCreate([
+                    'siswa_id'         => $siswa->id,
+                    'history_kelas_id' => $historyKelas->id,
+                    'tipe_tagihan_id'  => $tipe->id,
+                    'jenjang_id'       => $tipe->jenjang_id,
+                    'tahun_ajaran'     => $row['tahun_ajaran'],
+                ]);
+
                 $tagihan->siswa_id         = $siswa->id;
                 $tagihan->history_kelas_id = $historyKelas->id;
                 $tagihan->tipe_tagihan_id  = $tipe->id;
