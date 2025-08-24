@@ -166,7 +166,7 @@
                 </ol>
             </p>
 
-            {{-- <div id="ttd">
+            <div id="ttd">
                 <table width="100%">
                     <tr>
                         <td width="70%"></td>
@@ -175,16 +175,16 @@
                                 Karanganyar, {{ date('d F Y') }} <Br>
                                 Bendahara Sekolah,
                             </div>
-                            <div class="my-2">
-                                <img src="{{ public_path('assets/img/ttd.png') }}" alt="ttd" width="100" height="100">
+                            <div class="my-2" style="height: 100px;">
+                                {{-- <img src="{{ public_path('assets/img/ttd.png') }}" alt="ttd" width="100" height="100"> --}}
                             </div>
                             <div id="camat">
-                                <strong><u>Najmudin, S.Kom</u></strong>
+                                <strong><u>{{ $pembayaran->createdBy->name }}</u></strong>
                             </div>
                         </td>
                     </tr>
                 </table>
-            </div> --}}
+            </div>
         </div>
     </div>
 </body>
