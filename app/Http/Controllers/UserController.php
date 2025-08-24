@@ -43,11 +43,6 @@ class UserController extends BaseController
             'email'                 => 'required|email|unique:users,email',
             'password'              => 'required',
             'password_confirmation' => 'required|same:password',
-            'nomor_hp'              => 'required',
-            'alamat'                => 'required',
-            'tempat_lahir'          => 'required',
-            'tanggal_lahir'         => 'required',
-            'jenis_kelamin'         => 'required',
         ]);
 
         DB::beginTransaction();
@@ -56,12 +51,7 @@ class UserController extends BaseController
             $user->name          = $request->name;
             $user->email         = $request->email;
             $user->password      = bcrypt($request->password);
-            $user->nomor_hp      = $request->nomor_hp;
-            $user->alamat        = $request->alamat;
-            $user->tempat_lahir  = $request->tempat_lahir;
-            $user->tanggal_lahir = $request->tanggal_lahir;
-            $user->jenis_kelamin = $request->jenis_kelamin;
-            $user->type          = 'user';
+            $user->type          = 'bendahara';
             $user->save();
 
             $notification = array(
@@ -110,11 +100,6 @@ class UserController extends BaseController
         $request->validate([
             'name'                  => 'required',
             'email'                 => 'required|email|unique:users,email,' . $id,
-            'nomor_hp'              => 'required',
-            'alamat'                => 'required',
-            'tempat_lahir'          => 'required',
-            'tanggal_lahir'         => 'required',
-            'jenis_kelamin'         => 'required',
         ]);
 
         if ($request->password) {
@@ -134,12 +119,7 @@ class UserController extends BaseController
                 $user->password = bcrypt($request->password);
             }
 
-            $user->nomor_hp      = $request->nomor_hp;
-            $user->alamat        = $request->alamat;
-            $user->tempat_lahir  = $request->tempat_lahir;
-            $user->tanggal_lahir = $request->tanggal_lahir;
-            $user->jenis_kelamin = $request->jenis_kelamin;
-            $user->type          = 'user';
+            $user->type          = 'bendahara';
             $user->save();
 
             $notification = array(

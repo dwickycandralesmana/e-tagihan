@@ -28,7 +28,7 @@
                         </span>
                     </a>
                 </li>
-                @if ($auth->type == 'admin')
+                @if ($auth)
                     <li class="nav-item" id="liJenjang">
                         <a class="nav-link" href="{{ route('jenjang.index') }}">
                             <span class="nav-link-icon d-md-none d-lg-inline-block">
