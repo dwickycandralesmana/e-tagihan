@@ -24,6 +24,10 @@ class PembayaranDetail extends Model
 
     public function getBulanTextAttribute()
     {
+        if (empty($this->bulan)) {
+            return '';
+        }
+
         $year = $this->bulan >= 1 && $this->bulan <= 6 ? $this->tahun_ajaran + 1 : $this->tahun_ajaran;
         $bulan = $this->bulan ? " - " . Carbon::parse($year . '-' . $this->bulan . '-01')->format('M') : "";
 

@@ -140,7 +140,7 @@
                             @foreach ($pembayaran->details as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->tagihanNew->tipe_tagihan->nama }}</td>
+                                    <td>{{ $item->tagihanNew->tipe_tagihan->nama }} {{ $item->bulan_text }}</td>
                                     <td>{{ formatRp($item->bayar) }}</td>
                                     <td>{{ formatRp($item->potongan) }}</td>
                                     <td>{{ formatRp($item->jumlah) }}</td>
