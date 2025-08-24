@@ -28,6 +28,9 @@ Siswa
                         <a href="{{ route('siswa.create') }}" class="btn btn-primary float-end">
                             <i class="fa fa-plus"></i> Tambah Siswa
                         </a>
+                        <button class="btn btn-primary float-end me-2" data-bs-toggle="modal" data-bs-target="#modalImport">
+                            <i class="fa fa-upload"></i> Import
+                        </button>
                     </div>
                     <div class="col-12">
                         <div class="table table-responsive">
@@ -43,6 +46,37 @@ Siswa
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-blur fade" id="modalImport" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Import Siswa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="{{ route('siswa.import') }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label required">File</label>
+                        <input type="file" class="form-control" name="file" required accept=".xlsx">
+                        <div class="form-text">File harus berupa .xlsx</div>
+                    </div>
+
+                    <a href="{{ asset('imports/template-siswa.xlsx') }}" class="btn btn-success"><i class="fas fa-file-excel"></i> Download Template</a>
+
+                    {{-- <div class="alert alert-warning">
+                        <strong>Perhatian!</strong> Pastikan file yang diupload sesuai dengan format yang telah ditentukan. Silahkan download formatnya terlebih dahulu dari <b>"Menu Jenjang".</b>
+                    </div> --}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -48,6 +48,7 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::get('jenis-pembayaran/data', [JenisPembayaranController::class, 'data'])->name('jenis-pembayaran.data');
     Route::resource('jenis-pembayaran', JenisPembayaranController::class);
 
+    Route::post('siswa/import', [SiswaController::class, 'import'])->name('siswa.import');
     Route::get('siswa/data', [SiswaController::class, 'data'])->name('siswa.data');
     Route::resource('siswa', SiswaController::class);
 

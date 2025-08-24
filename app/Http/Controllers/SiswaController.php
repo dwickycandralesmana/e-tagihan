@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SiswaImport;
 use App\Imports\UserImport;
 use App\Models\Siswa;
 use App\Models\User;
@@ -187,74 +188,17 @@ class SiswaController extends BaseController
         return view('admin.siswa.profile', $this->data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function profile_update(Request $request)
+    public function import(Request $request)
     {
-        $id = Auth::user()->id;
-
-        $request->validate([
-            'name'                  => 'required',
-            'email'                 => 'required|email|unique:users,email,' . $id,
-        ]);
-
-        if ($request->password) {
-            $request->validate([
-                'password'              => 'required',
-                'password_confirmation' => 'required|same:password',
-            ]);
-        }
-
         DB::beginTransaction();
         try {
-            $siswa                = Siswa::find($id);
-            $siswa->name          = $request->name;
-            $siswa->email         = $request->email;
-
-            if ($request->password) {
-                $siswa->password = bcrypt($request->password);
-            }
-
-            $siswa->save();
-
-            $notification = array(
-                'message'    => 'Data berhasil disimpan',
-                'alert-type' => 'success'
-            );
+            Excel::import(new SiswaImport(), $request->file('file'));
         } catch (\Exception $e) {
+            DB::rollBack();
+
             $notification = array(
                 'message'    => 'Data gagal disimpan',
                 'alert-type' => 'error'
-            );
-
-            DB::rollBack();
-
-            return redirect()->back()->with($notification);
-        }
-
-        DB::commit();
-
-        return redirect()->route('dashboard')->with($notification);
-    }
-
-    public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls',
-        ]);
-
-        DB::beginTransaction();
-
-        try {
-            Excel::import(new UserImport, $request->file('file'));
-        } catch (Exception $e) {
-            DB::rollback();
-
-            $notification = array(
-                'message'    => $e->getMessage(),
-                'alert-type' => 'danger',
-                'status'     => false,
             );
 
             return redirect()->back()->with($notification);
@@ -263,11 +207,10 @@ class SiswaController extends BaseController
         DB::commit();
 
         $notification = array(
-            'status' => true,
-            'alert-type' => 'success',
-            'message' => 'Data user berhasil diimport!',
+            'message'    => 'Data berhasil disimpan',
+            'alert-type' => 'success'
         );
 
-        return redirect()->back()->with($notification);
+        return redirect()->route('siswa.index')->with($notification);
     }
 }
