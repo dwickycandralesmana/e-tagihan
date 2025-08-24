@@ -123,8 +123,11 @@
                                 <input type="hidden" name="tagihan_id[]" value="{{ $item->id }}">
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    @php
+                                        $deskripsi = $item->deskripsi;
+                                    @endphp
 
-                                    @if($item->deskripsi)
+                                    @if($deskripsi)
                                         <td>
                                             {{ $item->tipe_tagihan->nama }}
 
@@ -133,7 +136,7 @@
                                                 <small class="text-muted">dihitung selama 12 bulan</small>
                                             @endif
                                         </td>
-                                        <td>{{ $item->deskripsi }}</td>
+                                        <td>{{ $deskripsi }}</td>
                                     @else
                                         <td colspan="2">
                                             {{ $item->tipe_tagihan->nama }}
@@ -188,8 +191,11 @@
                                             <td colspan="2"> {{ \Carbon\Carbon::parse("$thisYear-$i-01")->translatedFormat('F') }} {{ $thisYear }}</td>
                                             <td>
                                                 @php
+                                                    $tempTotal = $details->sum('bayar');
+                                                    $tempPotongan = $details->sum('potongan');
+
                                                     if($item->tipe_tagihan->key == 'spp' && $item->tipe_tagihan->jenjang_id == 1 && $i == 7){
-                                                        $tempTagihan = 0;
+                                                        $tempTagihan     = 0;
                                                     }else{
                                                         $tempTagihan = $tagihanPerBulan;
                                                     }
@@ -198,18 +204,17 @@
                                                 {{ formatRp($tempTagihan) }}
                                             </td>
                                             <td>
-                                                @php
-                                                    $tempTotal = $details->sum('bayar');
-                                                    $tempPotongan = $details->sum('potongan');
-                                                @endphp
-
                                                 {{ formatRp($tempTotal) }}
                                             </td>
                                             <td>
                                                 {{ formatRp($tempPotongan) }}
                                             </td>
                                             <td>
-                                                {{ formatRp($tagihanPerBulan - ($tempTotal + $tempPotongan)) }}
+                                                @if($tempTagihan == 0)
+                                                    {{ formatRp($tempTagihan) }}
+                                                @else
+                                                    {{ formatRp($tagihanPerBulan - ($tempTotal + $tempPotongan)) }}
+                                                @endif
                                             </td>
                                         </tr>
                                     @endfor

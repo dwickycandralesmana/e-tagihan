@@ -15,7 +15,7 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        abort_unless(auth()->user()->type === 'admin', 403);
+        abort_unless(in_array(auth()->user()->type, ['admin', 'bendahara']), 403);
 
         return $next($request);
     }
