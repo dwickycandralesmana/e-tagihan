@@ -121,9 +121,8 @@
                     </td>
                 </tr>
             </table>
-            <br>
             <div>
-                <div id="rincian" style="mb-3">
+                <div id="rincian" style="">
                     <h4>
                         <u>RINCIAN PEMBAYARAN</u>
                     </h4>
