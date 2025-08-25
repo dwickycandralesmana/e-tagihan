@@ -47,14 +47,14 @@
 
 <body>
     <div>
-        <header>
+        <header style="margin-top: -30px;">
             <table style="margin:auto;">
                 <tr>
                     <td>
                         <div id="img" style="margin-right: 10px;">
                             <img id="logo"
                                 src="{{ public_path('assets/img/logo.png') }}"
-                                width="120" height="140" />
+                                width="80" height="100" />
                         </div>
                     </td>
                     <td class="text-center">
@@ -71,10 +71,9 @@
 
         <div class="container-full">
             <hr class="garis1" />
-            <div class="text-center fw-bold">
+            <div class="text-center fw-bold" style="margin-top: -10px;">
                 <div>BUKTI PEMBAYARAN</div>
             </div>
-            <Br>
             <table style="width: 100%;">
                 <tr>
                     <td style="width: 50%; vertical-align: top;">
@@ -156,11 +155,10 @@
                     </table>
                 </div>
             </div>
-            <br>
 
             <p>
                 Catatan:
-                <ol>
+                <ol style="margin-top: -15px;">
                     <li>Ini adalah bukti pembayaran yang sah</li>
                     <li>Harap simpan bukti pembayaran ini</li>
                 </ol>
@@ -175,7 +173,7 @@
                                 Karanganyar, {{ date('d F Y') }} <Br>
                                 Bendahara Sekolah,
                             </div>
-                            <div class="my-2" style="height: 100px;">
+                            <div class="my-2" style="height: 50px;">
                                 {{-- <img src="{{ public_path('assets/img/ttd.png') }}" alt="ttd" width="100" height="100"> --}}
                             </div>
                             <div id="camat">
