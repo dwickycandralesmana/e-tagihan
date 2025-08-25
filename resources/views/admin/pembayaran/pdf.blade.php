@@ -36,7 +36,7 @@
 
         #rincian > table, #rincian th, #rincian td {
             border: 1px solid black;
-            padding: 10px;
+            padding: 3px;
         }
 
         body{
