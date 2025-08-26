@@ -165,6 +165,15 @@ Tambah Pembayaran
                                             </tr>
                                         @endforelse
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="2" class="text-start fw-bold">Total</td>
+                                            <td class="fw-bold" id="totalBayar">0</td>
+                                            <td class="fw-bold" id="totalPotongan">0</td>
+                                            <td class="fw-bold" id="totalJumlah">0</td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                                 {{-- <button type="button" class="btn btn-primary mt-3" id="addRow"><i class="fas fa-plus"></i> Tambah Baris</button> --}}
                             </div>
@@ -184,6 +193,47 @@ Tambah Pembayaran
 
 @section('scripts')
 <script type="text/javascript">
+    var formatRupiah = function(number) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).format(number);
+    };
+
+    var parseNumber = function(number) {
+        return parseFloat(number.replace(/[^0-9]/g, ''));
+    };
+
+    var generateTotal = function() {
+        let totalBayar     = 0;
+        let totalPotongan  = 0;
+        let totalJumlah    = 0;
+
+        $('.tr-item').each(function() {
+            let bayar     = parseNumber($(this).find('.bayar').val());
+            let potongan  = parseNumber($(this).find('.potongan').val());
+            let jumlah    = parseNumber($(this).find('.jumlah').val());
+
+            console.log(bayar);
+            console.log(potongan);
+            console.log(jumlah);
+
+            totalBayar     += bayar;
+            totalPotongan  += potongan;
+            totalJumlah    += jumlah;
+        });
+
+        console.log(totalBayar);
+        console.log(totalPotongan);
+        console.log(totalJumlah);
+
+        $('#totalBayar').text(formatRupiah(totalBayar));
+        $('#totalPotongan').text(formatRupiah(totalPotongan));
+        $('#totalJumlah').text(formatRupiah(totalJumlah));
+    };
+
     $(document).ready(function() {
         $('#liPembayaran').addClass('active');
         $('.select2').select2();
@@ -206,8 +256,12 @@ Tambah Pembayaran
             let jumlah    = container.find('.jumlah');
 
             jumlah.val(bayar + potongan);
+
+            generateTotal();
        });
     });
+
+    generateTotal();
 
     let paidMonth = @json($paidMonth);
     let thisYear = {{ $historyKelas->tahun_ajaran }};
@@ -299,6 +353,8 @@ Tambah Pembayaran
         } else {
             bulan.hide();
         }
+
+        generateTotal();
     });
 
     $('.btn-submit').on('click', function() {
