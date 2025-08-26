@@ -6,6 +6,7 @@ use App\Imports\TagihanImport;
 use App\Imports\TunggakanImport;
 use App\Models\HistoryKelas;
 use App\Models\Jenjang;
+use App\Models\Pembayaran;
 use App\Models\Tagihan;
 use App\Models\TagihanNew;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -59,7 +60,7 @@ class TagihanController extends BaseController
                     $html .= "<a href='" . route('tagihan.pdf', encryptWithKey($row->id)) . "' target='_blank' class='btn btn-success me-1 mb-1'><i class='fas fa-file-pdf'></i> Download Kartu Kendali</a>";
 
                     $html .= "<a href='" . route('pembayaran.create', ['id' => encryptWithKey($row->id)]) . "' target='_blank' class='btn btn-primary me-1 mb-1'><i class='fas fa-plus'></i> Buat Pembayaran</a>";
-                    // $html .= "<button class='btn btn-danger btn-delete mb-1 me-1' data-id='" . $row->id . "'><i class='fas fa-trash'></i> Hapus</button>";
+                    $html .= "<button class='btn btn-danger btn-delete mb-1 me-1' data-id='" . $row->id . "'><i class='fas fa-trash'></i> Hapus</button>";
                 }
 
                 return $html;
@@ -183,8 +184,12 @@ class TagihanController extends BaseController
     {
         DB::beginTransaction();
         try {
-            $user = Tagihan::findOrFail($id);
-            $user->delete();
+            $kelas = HistoryKelas::findOrFail($id);
+
+            TagihanNew::where('history_kelas_id', $id)->delete();
+            Pembayaran::where('history_kelas_id', $id)->delete();
+
+            $kelas->delete();
         } catch (Exception $e) {
             DB::rollback();
 
@@ -201,7 +206,7 @@ class TagihanController extends BaseController
 
         $notification = array(
             'status' => true,
-            'message' => 'Data user berhasil dihapus!',
+            'message' => 'Data berhasil dihapus!',
         );
 
         return response()->json($notification);

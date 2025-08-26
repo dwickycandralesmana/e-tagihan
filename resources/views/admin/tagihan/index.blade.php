@@ -197,7 +197,7 @@ Tagihan
 
             Swal.fire({
                 title: 'Apakah anda yakin?',
-                text: "Anda tidak dapat mengulangi tindakan ini!",
+                text: "Ini akan menghapus tagihan & pembayaran yang terkait. Anda tidak dapat mengulangi tindakan ini!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
