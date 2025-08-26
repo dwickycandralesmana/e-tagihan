@@ -129,22 +129,25 @@ class PembayaranController extends BaseController
 
             $notification = array(
                 'message'    => 'Data berhasil disimpan',
-                'alert-type' => 'success'
+                'alert-type' => 'success',
+                'status'     => true,
+                'url'        => route('pembayaran.pdf', $pembayaran->id),
             );
         } catch (\Exception $e) {
             $notification = array(
                 'message'    => 'Data gagal disimpan',
-                'alert-type' => 'error'
+                'alert-type' => 'error',
+                'status'     => false,
             );
 
             DB::rollBack();
 
-            return redirect()->back()->with($notification);
+            return response()->json($notification);
         }
 
         DB::commit();
 
-        return redirect()->route('pembayaran.pdf', $pembayaran->id)->with($notification);
+        return response()->json($notification);
 
         return redirect()->route('pembayaran.index')->with($notification);
     }

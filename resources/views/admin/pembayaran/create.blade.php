@@ -367,6 +367,7 @@ Tambah Pembayaran
     });
 
     $('.btn-submit').on('click', function() {
+        $(this).prop('disabled', true);
        let isValid = true;
        $('.bulan').each(function() {
            if ($(this).is(':visible') && $(this).find('select').val() == '') {
@@ -381,6 +382,8 @@ Tambah Pembayaran
                title: 'Gagal',
                text: 'Harap pilih bulan untuk tagihan yang terpilih!',
            });
+
+           $(this).prop('disabled', false);
            return false;
        }
 
@@ -402,6 +405,8 @@ Tambah Pembayaran
                title: 'Gagal',
                text: 'Bulan yang dipilih tidak boleh sama!',
            });
+
+           $(this).prop('disabled', false);
            return false;
        }
 
@@ -423,6 +428,8 @@ Tambah Pembayaran
                title: 'Gagal',
                text: 'Jumlah pembayaran melebihi kekurangan tagihan!',
            });
+
+           $(this).prop('disabled', false);
            return false;
        }
 
@@ -432,6 +439,8 @@ Tambah Pembayaran
                title: 'Gagal',
                text: 'Harap isi jumlah tagihan!',
            });
+
+           $(this).prop('disabled', false);
            return false;
        }
 
@@ -441,10 +450,43 @@ Tambah Pembayaran
                title: 'Gagal',
                text: 'Harap pilih metode pembayaran!',
            });
+
+           $(this).prop('disabled', false);
            return false;
        }
 
-       $('#formPembayaran').submit();
+       $.ajax({
+           url: "{{ route('pembayaran.store') }}",
+           method: "POST",
+           data: $('#formPembayaran').serialize(),
+           success: function(response) {
+               console.log(response);
+
+               Swal.fire({
+                   icon: 'success',
+                   title: 'Berhasil',
+                   text: 'Pembayaran berhasil! Ingin unduh bukti pembayaran?',
+                   showCancelButton: true,
+                   confirmButtonText: 'Ya',
+                   cancelButtonText: 'Tidak',
+               }).then((result) => {
+                   if (result.isConfirmed) {
+                       window.location.href = response.url;
+                   }else{
+                       window.location.href = "{{ route('pembayaran.index') }}";
+                   }
+               });
+           },
+           error: function(xhr) {
+               Swal.fire({
+                   icon: 'error',
+                   title: 'Gagal',
+                   text: xhr.responseJSON.message,
+               });
+
+               $(this).prop('disabled', false);
+           }
+       });
     });
 </script>
 @endsection

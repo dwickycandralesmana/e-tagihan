@@ -74,6 +74,7 @@ Tagihan per Siswa
         $('#liLaporanSiswa').addClass('active');
         $('#liLaporan').addClass('active');
         $('#liLaporan .dropdown-menu').addClass('show');
+        $('.select2').select2();
 
         let table = $("#table").DataTable({
             processing: false,
@@ -99,6 +100,10 @@ Tagihan per Siswa
                 {data: 'action', name: 'action', orderable: false, searchable: false, width: '30%'},
             ],
         });
+
+        $(document).on('click','#btnFilter', function(){
+            table.ajax.reload();
+        })
 
         $(document).on('click','.btn-delete', function(){
             id = $(this).attr('data-id');
