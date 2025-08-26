@@ -8,6 +8,7 @@ use App\Http\Controllers\JenisPembayaranController;
 use App\Http\Controllers\JenjangController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\TagihanController;
@@ -41,6 +42,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', IsAdmin::class])->group(function () {
+    Route::get('laporan/siswa/data', [ReportController::class, 'siswaData'])->name('laporan.siswa.data');
+    Route::get('laporan/siswa', [ReportController::class, 'siswa'])->name('laporan.siswa');
+    Route::get('laporan/siswa/{id}/export', [ReportController::class, 'siswaExport'])->name('laporan.siswa.export');
+
     Route::get('pembayaran/{id}/pdf', [PembayaranController::class, 'pdf'])->name('pembayaran.pdf');
     Route::get('pembayaran/data', [PembayaranController::class, 'data'])->name('pembayaran.data');
     Route::resource('pembayaran', PembayaranController::class);
