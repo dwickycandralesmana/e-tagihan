@@ -412,7 +412,9 @@ Tambah Pembayaran
             container.find('.potongan').val(potongan);
         }
 
-        let jumlah = (parseFloat(container.find('.bayar').val()) + parseFloat(container.find('.potongan').val()));
+        let jumlah = bayar + potongan;
+
+        container.find('.jumlah').val(jumlah);
 
         generateTotal();
     });
