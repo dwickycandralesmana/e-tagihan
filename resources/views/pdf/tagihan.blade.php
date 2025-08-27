@@ -155,7 +155,7 @@
                                         {{ formatRp($item->total) }}
                                     </td>
                                     @php
-                                        $tempTotal = $item->pembayaran_details->sum('bayar');
+                                        $tempTotal = $item->pembayaran_details->sum('bayar') + $item->pembayaran_details->sum('potongan');
                                         $tempPotongan = $item->potongan;
 
                                         $totalBayar += $tempTotal;
@@ -300,8 +300,8 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="6" class="text-start fw-bold">Terbilang: <br> <i>{{ terbilangRupiah($totalTagihan) }}</i></td>
-                                <td class="fw-bold">{{ formatRp($totalTagihan) }}</td>
+                                <td colspan="6" class="text-start fw-bold">Terbilang: <br> <i>{{ terbilangRupiah($totalTagihan - $totalBayar) }}</i></td>
+                                <td class="fw-bold">{{ formatRp($totalTagihan - $totalBayar) }}</td>
                             </tr>
                         </tfoot>
                     </table>
