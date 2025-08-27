@@ -77,6 +77,15 @@ Pembayaran
         $('.daterangepicer').daterangepicker({
             locale: {
                 format: 'DD/MM/YYYY'
+            },
+            ranges: {
+                'Hari ini': [moment(), moment()],
+                'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Dua Hari Lalu': [moment().subtract(2, 'days'), moment().subtract(1, 'days')],
+                'Minggu Ini': [moment().startOf('week'), moment().endOf('week')],
+                'Dua Minggu Terakhir': [moment().subtract(2, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+                'Bulan Ini': [moment().startOf('month'), moment().endOf('month')],
+                'Dua Bulan Terakhir': [moment().subtract(2, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
             }
         });
 
