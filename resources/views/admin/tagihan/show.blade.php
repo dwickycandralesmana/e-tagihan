@@ -135,29 +135,6 @@ Tagihan
                                             <h3>{{ formatRp($totalTagihan - $totalBayar) }}</h3>
                                         </td>
                                     </tr>
-
-                                    @forelse(json_decode($tagihan->column, true) ?? [] as $key => $item)
-                                        @php
-                                            if($item['key'] == 'total_tunggakan' && json_decode($tagihan->column, true)[$key-1]['key'] == 'tunggakan'){
-                                                continue;
-                                            }
-                                        @endphp
-
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            @if($item['key'] == 'tunggakan' && json_decode($tagihan->column, true)[$key+1]['key'] == 'total_tunggakan')
-                                                <td>{{ $item['label'] }}</td>
-                                                <td>{{ $item['value'] }}</td>
-
-                                                <td>{{ formatRp(json_decode($tagihan->column, true)[$key+1]['value']) }}</td>
-                                            @else
-                                                <td colspan="2">{{ $item['label'] }}</td>
-                                                <td>{{ formatRp($item['value']) }}</td>
-                                            @endif
-                                        </tr>
-                                    @empty
-
-                                    @endforelse
                                 </tbody>
                             </table>
                         </div>

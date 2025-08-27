@@ -115,8 +115,9 @@
                         </thead>
                         <tbody>
                             @php
-                                $totalBayar   = 0;
-                                $totalTagihan = 0;
+                                $totalBayar    = 0;
+                                $totalTagihan  = 0;
+                                $totalPotongan = 0;
                             @endphp
 
                             @forelse ($tagihan->tagihans as $key => $item)
@@ -155,11 +156,12 @@
                                         {{ formatRp($item->total) }}
                                     </td>
                                     @php
-                                        $tempTotal = $item->pembayaran_details->sum('bayar') + $item->pembayaran_details->sum('potongan');
-                                        $tempPotongan = $item->potongan;
+                                        $tempTotal    = $item->pembayaran_details->sum('bayar');
+                                        $tempPotongan = $item->potongan > 0 ? $item->potongan : $item->pembayaran_details->sum('potongan');
 
-                                        $totalBayar += $tempTotal;
-                                        $totalTagihan += $item->total;
+                                        $totalBayar    += $tempTotal;
+                                        $totalTagihan  += $item->total;
+                                        $totalPotongan += $tempPotongan;
                                     @endphp
 
                                     <td>
@@ -187,6 +189,7 @@
                                             $potonganPerBulan = $item->potongan / 11;
                                         }
                                     @endphp
+
                                     @for($i = 7; $i <= 12; $i++)
                                         @php
                                             $details = $item->pembayaran_details->where('bulan', $i)->where('key', $item->tipe_tagihan->key);
@@ -197,15 +200,17 @@
                                             <td colspan="2"> {{ \Carbon\Carbon::parse("$thisYear-$i-01")->translatedFormat('F') }} {{ $thisYear }}</td>
                                             <td>
                                                 @php
-                                                    $tempTotal = $details->sum('bayar');
+                                                    $tempTotal    = $details->sum('bayar');
                                                     $tempPotongan = $details->sum('potongan');
 
-                                                    if($tempPotongan > 0){
-                                                        $potonganPerBulan = $potonganPerBulan;
+                                                    if($tempPotongan == 0 && $tempTotal == 0){
+                                                        $tempPotongan = $potonganPerBulan;
                                                     }
 
                                                     if($item->tipe_tagihan->key == 'spp' && $item->tipe_tagihan->jenjang_id == 1 && $i == 7){
-                                                        $tempTagihan     = 0;
+                                                        $tempTagihan  = 0;
+                                                        $tempPotongan = 0;
+                                                        $tempPotongan = 0;
                                                     }else{
                                                         $tempTagihan = $tagihanPerBulan;
                                                     }
@@ -217,7 +222,7 @@
                                                 {{ formatRp($tempTotal) }}
                                             </td>
                                             <td>
-                                                {{ formatRp($potonganPerBulan) }}
+                                                {{ formatRp($tempPotongan) }}
                                             </td>
                                             <td>
                                                 @if($tempTagihan == 0)
@@ -240,21 +245,29 @@
                                             <td>{{ formatRp($tagihanPerBulan) }}</td>
                                             <td>
                                                 @php
-                                                    $tempTotal = $details->sum('bayar');
+                                                    $tempTotal    = $details->sum('bayar');
                                                     $tempPotongan = $details->sum('potongan');
 
-                                                    if($tempPotongan > 0){
-                                                        $potonganPerBulan = $potonganPerBulan;
+                                                    if($tempPotongan == 0 && $tempTotal == 0){
+                                                        $tempPotongan = $potonganPerBulan;
+                                                    }
+
+                                                    if($item->tipe_tagihan->key == 'spp' && $item->tipe_tagihan->jenjang_id == 1 && $i == 7){
+                                                        $tempTagihan  = 0;
+                                                        $tempPotongan = 0;
+                                                        $tempPotongan = 0;
+                                                    }else{
+                                                        $tempTagihan = $tagihanPerBulan;
                                                     }
                                                 @endphp
 
                                                 {{ formatRp($tempTotal) }}
                                             </td>
                                             <td>
-                                                {{ formatRp($potonganPerBulan) }}
+                                                {{ formatRp($tempPotongan) }}
                                             </td>
                                             <td>
-                                                {{ formatRp($tagihanPerBulan - ($tempTotal + $potonganPerBulan)) }}
+                                                {{ formatRp($tagihanPerBulan - ($tempTotal + $tempPotongan)) }}
                                             </td>
                                         </tr>
                                     @endfor
@@ -264,44 +277,11 @@
                                     <td colspan="6">Data tidak ditemukan</td>
                                 </tr>
                             @endforelse
-
-                            @forelse(json_decode($tagihan->column, true) ?? [] as $key => $item)
-                                @php
-                                    if($item['key'] == 'total_tunggakan' && json_decode($tagihan->column, true)[$key-1]['key'] == 'tunggakan'){
-                                        continue;
-                                    }
-                                @endphp
-
-                                <tr>
-                                    @if($loop->last)
-                                        <td></td>
-                                    @else
-                                        <td>{{ $loop->iteration }}</td>
-                                    @endif
-
-                                    @if($item['key'] == 'tunggakan' && json_decode($tagihan->column, true)[$key+1]['key'] == 'total_tunggakan')
-                                        <td class="text-nowrap">{{ $item['label'] }}</td>
-                                        <td>{{ $item['value'] }}</td>
-
-                                        <td class="text-nowrap">{{ formatRp(json_decode($tagihan->column, true)[$key+1]['value']) }}</td>
-                                    @else
-                                        @if($loop->last)
-                                            <td colspan="2" class="text-nowrap fw-bold text-center">{{ $item['label'] }}</td>
-                                            <td class="text-nowrap fw-bold">{{ formatRp($item['value']) }}</td>
-                                        @else
-                                            <td colspan="2" class="text-nowrap">{{ $item['label'] }}</td>
-                                            <td class="text-nowrap">{{ formatRp($item['value']) }}</td>
-                                        @endif
-                                    @endif
-                                </tr>
-                            @empty
-
-                            @endforelse
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="6" class="text-start fw-bold">Terbilang: <br> <i>{{ terbilangRupiah($totalTagihan - $totalBayar) }}</i></td>
-                                <td class="fw-bold">{{ formatRp($totalTagihan - $totalBayar) }}</td>
+                                <td colspan="6" class="text-start fw-bold">Terbilang: <br> <i>{{ terbilangRupiah($totalTagihan - $totalBayar - $totalPotongan) }}</i></td>
+                                <td class="fw-bold">{{ formatRp($totalTagihan - $totalBayar - $totalPotongan) }}</td>
                             </tr>
                         </tfoot>
                     </table>
