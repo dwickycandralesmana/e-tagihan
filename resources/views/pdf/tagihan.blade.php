@@ -156,7 +156,7 @@
                                     </td>
                                     @php
                                         $tempTotal = $item->pembayaran_details->sum('bayar');
-                                        $tempPotongan = $item->pembayaran_details->sum('potongan');
+                                        $tempPotongan = $item->potongan;
 
                                         $totalBayar += $tempTotal;
                                         $totalTagihan += $item->total;
@@ -180,9 +180,11 @@
                                         \Carbon\Carbon::setLocale('id');
 
                                         $tagihanPerBulan = $item->total / 12;
+                                        $potonganPerBulan = $item->potongan / 12;
 
                                         if($item->tipe_tagihan->key == 'spp' && $item->tipe_tagihan->jenjang_id == 1){
                                             $tagihanPerBulan = $item->total / 11;
+                                            $potonganPerBulan = $item->potongan / 11;
                                         }
                                     @endphp
                                     @for($i = 7; $i <= 12; $i++)
@@ -198,6 +200,10 @@
                                                     $tempTotal = $details->sum('bayar');
                                                     $tempPotongan = $details->sum('potongan');
 
+                                                    if($tempPotongan > 0){
+                                                        $potonganPerBulan = $potonganPerBulan;
+                                                    }
+
                                                     if($item->tipe_tagihan->key == 'spp' && $item->tipe_tagihan->jenjang_id == 1 && $i == 7){
                                                         $tempTagihan     = 0;
                                                     }else{
@@ -211,7 +217,7 @@
                                                 {{ formatRp($tempTotal) }}
                                             </td>
                                             <td>
-                                                {{ formatRp($tempPotongan) }}
+                                                {{ formatRp($potonganPerBulan) }}
                                             </td>
                                             <td>
                                                 @if($tempTagihan == 0)
@@ -236,15 +242,19 @@
                                                 @php
                                                     $tempTotal = $details->sum('bayar');
                                                     $tempPotongan = $details->sum('potongan');
+
+                                                    if($tempPotongan > 0){
+                                                        $potonganPerBulan = $potonganPerBulan;
+                                                    }
                                                 @endphp
 
                                                 {{ formatRp($tempTotal) }}
                                             </td>
                                             <td>
-                                                {{ formatRp($tempPotongan) }}
+                                                {{ formatRp($potonganPerBulan) }}
                                             </td>
                                             <td>
-                                                {{ formatRp($tagihanPerBulan - ($tempTotal + $tempPotongan)) }}
+                                                {{ formatRp($tagihanPerBulan - ($tempTotal + $potonganPerBulan)) }}
                                             </td>
                                         </tr>
                                     @endfor
