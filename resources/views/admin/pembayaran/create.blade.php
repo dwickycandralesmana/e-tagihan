@@ -317,7 +317,7 @@ Tambah Pembayaran
         let potongan  = container.find('.potongan');
         let jumlah    = container.find('.jumlah');
 
-        if(type == 'spp') {
+        if(type == 'spp' || type == 'angsuran_ujian') {
             if(jenjang == 1) {
                 if(bulan == 7){
                     bayar.val(0);
@@ -360,6 +360,10 @@ Tambah Pembayaran
         bulanAngsuran.find('select').val('').trigger('change');
         deskripsiTunggakan.hide();
         deskripsiTunggakan.find('.deskripsi').val('');
+
+        container.find('.bayar').val('0');
+        container.find('.potongan').val('0');
+        container.find('.jumlah').val('0');
 
         let bayar    = 0;
         let potongan = 0;
