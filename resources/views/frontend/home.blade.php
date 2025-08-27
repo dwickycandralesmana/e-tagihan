@@ -88,6 +88,7 @@
                             @php
                                 $totalBayar   = 0;
                                 $totalTagihan = 0;
+                                $totalPotongan = 0;
                             @endphp
 
                             @forelse ($tagihan->tagihans as $key => $item)
@@ -121,10 +122,11 @@
                                     </td>
                                     @php
                                         $tempTotal = $item->pembayaran_details->sum('bayar');
-                                        $tempPotongan = $item->pembayaran_details->sum('potongan');
+                                        $tempPotongan = $item->potongan;
 
                                         $totalBayar += $tempTotal;
                                         $totalTagihan += $item->total;
+                                        $totalPotongan += $item->potongan;
                                     @endphp
 
                                     <td>
@@ -176,6 +178,15 @@
 
                             @endforelse
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="fw-bold text-center">Total</td>
+                                <td class="text-nowrap fw-bold">{{ formatRp($totalTagihan) }}</td>
+                                <td class="text-nowrap fw-bold">{{ formatRp($totalBayar) }}</td>
+                                <td class="text-nowrap fw-bold">{{ formatRp($totalPotongan) }}</td>
+                                <td class="text-nowrap fw-bold">{{ formatRp($totalTagihan - $totalBayar) }}</td>
+                            </tr>
+                        </tfoot>
                     </table>
 
                     <a href="{{ route('tagihan.pdf', encryptWithKey($tagihan->id)) }}" target="_blank" class="btn btn-primary"><i class="fas fa-file-pdf me-1"></i> Download Kartu Kendali</a>
