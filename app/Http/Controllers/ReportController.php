@@ -66,6 +66,8 @@ class ReportController extends BaseController
 
         $this->kelas = $kelas;
 
+        return view('admin.report.export.pembayaran-siswa', $this->data);
+
         return Excel::download(new SiswaExport($kelas), $kelas->siswa->nama . ' - ' . $kelas->kelas . ' - ' . $kelas->tahun_ajaran . '.xlsx');
     }
 }

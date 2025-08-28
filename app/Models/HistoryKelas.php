@@ -23,4 +23,9 @@ class HistoryKelas extends Model
     {
         return $this->hasMany(TagihanNew::class);
     }
+
+    public function pembayaran_details()
+    {
+        return $this->hasMany(PembayaranDetail::class);
+    }
 }
