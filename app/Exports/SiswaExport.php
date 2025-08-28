@@ -16,6 +16,6 @@ class SiswaExport implements FromView
     {
         $kelas = $this->kelas;
 
-        return view('admin.report.export.siswa', compact('kelas'));
+        return view('admin.report.export.pembayaran-siswa', compact('kelas'));
     }
 }
