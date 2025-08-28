@@ -9,6 +9,8 @@
                 <td rowspan="2">DU TOTAL</td>
                 <td rowspan="2">DU DIBAYAR</td>
                 <td rowspan="2">KEKURANGAN DU</td>
+            @elseif($item->key == 'tunggakan_kelas_x' || $item->key == 'tunggakan_kelas_xi')
+                <td colspan="2">{{ $item->nama }}</td>
             @elseif($item->key == 'spp')
                 @php
                     $listTahun = [
@@ -49,7 +51,10 @@
     </tr>
     <tr>
         @foreach ($tagihan as $item)
-            @if($item->key == 'spp')
+            @if($item->key == 'tunggakan_kelas_x' || $item->key == 'tunggakan_kelas_xi')
+                <td>RINCIAN</td>
+                <td>TOTAL</td>
+            @elseif($item->key == 'spp')
                 @foreach ($listMonth as $monthGroup)
                     @foreach ($monthGroup as $month)
                         <td>{{ $month }}</td>
@@ -87,6 +92,9 @@
                     <td>{{ $tagihanNew->total }}</td>
                     <td>{{ $sudahBayar }}</td>
                     <td>{{ $tagihanNew->total - $sudahBayar }}</td>
+                @elseif($tagihanData->key == 'tunggakan_kelas_x' || $tagihanData->key == 'tunggakan_kelas_xi')
+                <td>{{ $tagihanNew->deskripsi }}</td>
+                    <td>{{ $tagihanNew->kurang() }}</td>
                 @elseif($tagihanData->key == 'spp')
                     @foreach ($listMonth as $monthGroup)
                         @foreach ($monthGroup as $bulan => $month)
