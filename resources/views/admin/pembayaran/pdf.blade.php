@@ -147,8 +147,13 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="4" class="text-start fw-bold">Terbilang: <br> <i>{{ terbilangRupiah($pembayaran->details->sum('jumlah')) }}</i></td>
+                                <td colspan="2" class="text-end fw-bold">TOTAL</td>
+                                <td class="fw-bold">{{ formatRp($pembayaran->details->sum('bayar')) }}</td>
+                                <td class="fw-bold">{{ formatRp($pembayaran->details->sum('potongan')) }}</td>
                                 <td class="fw-bold">{{ formatRp($pembayaran->details->sum('jumlah')) }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="text-start fw-bold">Terbilang: <br> <i>{{ terbilangRupiah($pembayaran->details->sum('jumlah')) }}</i></td>
                             </tr>
                         </tfoot>
                     </table>

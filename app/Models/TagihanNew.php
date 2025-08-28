@@ -37,4 +37,18 @@ class TagihanNew extends Model
     {
         return $this->hasMany(PembayaranDetail::class);
     }
+
+    public function kurang()
+    {
+        return $this->total - $this->pembayaran_details()->sum('jumlah');
+    }
+
+    public function sppPerBulan()
+    {
+        if ($this->jenjang_id == 1) {
+            return $this->total / 11;
+        }
+
+        return $this->total / 12;
+    }
 }

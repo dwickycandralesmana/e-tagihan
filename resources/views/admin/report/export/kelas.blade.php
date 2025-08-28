@@ -18,51 +18,69 @@
 
                     $listMonth = [
                         [
-                            7 => 'Juli',
-                            8 => 'Agustus',
-                            9 => 'September',
-                            10 => 'Oktober',
-                            11 => 'November',
-                            12 => 'Desember',
+                            7 => 'JUL',
+                            8 => 'AGS',
+                            9 => 'SEP',
+                            10 => 'OKT',
+                            11 => 'NOV',
+                            12 => 'DES',
                         ],
                         [
-                            1 => 'Januari',
-                            2 => 'Februari',
-                            3 => 'Maret',
-                            4 => 'April',
-                            5 => 'Mei',
-                            6 => 'Juni',
+                            1 => 'JAN',
+                            2 => 'FEB',
+                            3 => 'MAR',
+                            4 => 'APR',
+                            5 => 'MEI',
+                            6 => 'JUN',
                         ]
                     ];
                 @endphp
 
                 @foreach ($listTahun as $k => $tahun)
-                    <tr>
-                        <td>{{ $tahun }}</td>
-                    </tr>
-                    <tr>
-                    @foreach ($listMonth[$k] as $month)
-                            <td>{{ $month }}</td>
-                            @endforeach
-                        </tr>
+                    <td colspan="6">{{ $tahun }}</td>
+                @endforeach
+                <td rowspan="2">SPP KURANG</td>
+            @else
+                <td rowspan="2">{{ $item->nama }}</td>
+            @endif
+        @endforeach
+
+        <td rowspan="2">TOTAL TAGIHAN</td>
+    </tr>
+    <tr>
+        @foreach ($tagihan as $item)
+            @if($item->key == 'spp')
+                @foreach ($listMonth as $monthGroup)
+                    @foreach ($monthGroup as $month)
+                        <td>{{ $month }}</td>
+                    @endforeach
                 @endforeach
             @endif
         @endforeach
     </tr>
 
-    {{-- @foreach ($kelas as $item)
+    @foreach ($kelas as $item)
+        @php
+            $totalTagihan      = 0;
+            $totalPotongan     = 0;
+            $totalSudahDibayar = 0;
+            $totalTunggakan    = 0;
+        @endphp
+
         <tr>
             <td>{{ $loop->iteration }}</td>
+            <td>{{ $item->siswa->nis }}</td>
             <td>{{ $item->siswa->nama }}</td>
 
             @foreach ($tagihan as $tagihanData)
                 @php
                     $tagihanNew = \App\Models\TagihanNew::where('tipe_tagihan_id', $tagihanData->id)
-                                           ->where('siswa_id', $item->siswa_id)
-                                           ->where('tahun_ajaran', $item->tahun_ajaran)
-                                           ->first();
+                    ->where('siswa_id', $item->siswa_id)
+                    ->where('tahun_ajaran', $item->tahun_ajaran)
+                    ->first();
 
-                    $sudahBayar = $item->pembayaran_details?->sum('bayar');
+                    $sudahBayar    = $item->pembayaran_details?->sum('bayar');
+                    $totalTagihan += $tagihanNew->kurang();
                 @endphp
 
                 @if($tagihanData->key == 'daftar_ulang')
@@ -70,9 +88,30 @@
                     <td>{{ $sudahBayar }}</td>
                     <td>{{ $tagihanNew->total - $sudahBayar }}</td>
                 @elseif($tagihanData->key == 'spp')
-                    <td>{{ $tagihanData->nama }}</td>
+                    @foreach ($listMonth as $monthGroup)
+                        @foreach ($monthGroup as $bulan => $month)
+                            <td>
+                                @php
+                                    $tagihanPerBulan = $tagihanNew->sppPerBulan();
+                                    $sudahBayar      = $tagihanNew->pembayaran_details?->where('bulan', $bulan)->sum('bayar');
+
+                                    $sisaBayar = $tagihanPerBulan - $sudahBayar;
+                                @endphp
+                                {{ $sisaBayar }}
+                            </td>
+                        @endforeach
+                    @endforeach
+                    <td>
+                        {{ $tagihanNew->kurang() }}
+                    </td>
+                @else
+                    <td>
+                        {{ $tagihanNew->kurang() }}
+                    </td>
                 @endif
             @endforeach
+
+            <td>{{ $totalTagihan }}</td>
         </tr>
-    @endforeach --}}
+    @endforeach
 </table>

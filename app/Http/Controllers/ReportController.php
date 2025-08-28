@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\KelasExport;
 use App\Exports\SiswaExport;
 use App\Models\HistoryKelas;
 use App\Models\Siswa;
@@ -89,6 +90,7 @@ class ReportController extends BaseController
 
         $jenjangId   = $kelas->first()->jenjang_id;
         $tahunAjaran = $kelas->first()->tahun_ajaran;
+        $namaKelas   = $kelas->first()->kelas;
 
         $tagihan = TipeTagihan::whereJenjangId($jenjangId)->whereTahunAjaran($tahunAjaran)->get();
 
@@ -96,8 +98,8 @@ class ReportController extends BaseController
         $this->tagihan = $tagihan;
         $this->tahun_ajaran = $tahunAjaran;
 
-        return view('admin.report.export.kelas', $this->data);
+        // return view('admin.report.export.kelas', $this->data);
 
-        return Excel::download(new SiswaExport($kelas), $kelas->siswa->nama . ' - ' . $kelas->kelas . ' - ' . $kelas->tahun_ajaran . '.xlsx');
+        return Excel::download(new KelasExport($kelas, $tagihan, $tahunAjaran), $namaKelas . ' - ' . $tahunAjaran . '.xlsx');
     }
 }
