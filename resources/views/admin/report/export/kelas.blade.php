@@ -10,12 +10,47 @@
                 <td rowspan="2">DU DIBAYAR</td>
                 <td rowspan="2">KEKURANGAN DU</td>
             @elseif($item->key == 'spp')
+                @php
+                    $listTahun = [
+                        $item->tahun_ajaran,
+                        $item->tahun_ajaran + 1,
+                    ];
 
+                    $listMonth = [
+                        [
+                            7 => 'Juli',
+                            8 => 'Agustus',
+                            9 => 'September',
+                            10 => 'Oktober',
+                            11 => 'November',
+                            12 => 'Desember',
+                        ],
+                        [
+                            1 => 'Januari',
+                            2 => 'Februari',
+                            3 => 'Maret',
+                            4 => 'April',
+                            5 => 'Mei',
+                            6 => 'Juni',
+                        ]
+                    ];
+                @endphp
+
+                @foreach ($listTahun as $k => $tahun)
+                    <tr>
+                        <td>{{ $tahun }}</td>
+                    </tr>
+                    <tr>
+                    @foreach ($listMonth[$k] as $month)
+                            <td>{{ $month }}</td>
+                            @endforeach
+                        </tr>
+                @endforeach
             @endif
         @endforeach
     </tr>
 
-    @foreach ($kelas as $item)
+    {{-- @foreach ($kelas as $item)
         <tr>
             <td>{{ $loop->iteration }}</td>
             <td>{{ $item->siswa->nama }}</td>
@@ -39,5 +74,5 @@
                 @endif
             @endforeach
         </tr>
-    @endforeach
+    @endforeach --}}
 </table>
