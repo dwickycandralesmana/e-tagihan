@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\SiswaExport;
 use App\Models\HistoryKelas;
 use App\Models\Siswa;
+use App\Models\TipeTagihan;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -67,6 +68,35 @@ class ReportController extends BaseController
         $this->kelas = $kelas;
 
         // return view('admin.report.export.pembayaran-siswa', $this->data);
+
+        return Excel::download(new SiswaExport($kelas), $kelas->siswa->nama . ' - ' . $kelas->kelas . ' - ' . $kelas->tahun_ajaran . '.xlsx');
+    }
+
+    public function kelas()
+    {
+        $this->listKelas = HistoryKelas::groupBy('kelas')->pluck('kelas');
+
+        return view('admin.report.kelas', $this->data);
+    }
+
+    public function kelasExport(Request $request)
+    {
+        $kelas = HistoryKelas::query()
+            ->with('jenjang', 'siswa', 'tagihans', 'tagihans.tipe_tagihan', 'tagihans.pembayaran_details')
+            ->where('kelas', $request->kelas)
+            ->where('tahun_ajaran', $request->tahun_ajaran)
+            ->get();
+
+        $jenjangId   = $kelas->first()->jenjang_id;
+        $tahunAjaran = $kelas->first()->tahun_ajaran;
+
+        $tagihan = TipeTagihan::whereJenjangId($jenjangId)->whereTahunAjaran($tahunAjaran)->get();
+
+        $this->kelas = $kelas;
+        $this->tagihan = $tagihan;
+        $this->tahun_ajaran = $tahunAjaran;
+
+        return view('admin.report.export.kelas', $this->data);
 
         return Excel::download(new SiswaExport($kelas), $kelas->siswa->nama . ' - ' . $kelas->kelas . ' - ' . $kelas->tahun_ajaran . '.xlsx');
     }

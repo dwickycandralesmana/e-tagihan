@@ -143,7 +143,7 @@
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="{{ route('laporan.siswa') }}" id="liLaporanSiswa"> Tagihan per Siswa </a>
-                        {{-- <a class="dropdown-item" href="{{ route('laporan.kelas') }}" id="liLaporanKelas"> Tagihan per Kelas </a> --}}
+                        <a class="dropdown-item" href="{{ route('laporan.kelas') }}" id="liLaporanKelas"> Tagihan per Kelas </a>
                     </div>
                 </li>
                 @if($auth->type == 'admin')
