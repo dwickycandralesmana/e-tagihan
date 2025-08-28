@@ -79,7 +79,7 @@
                     ->where('tahun_ajaran', $item->tahun_ajaran)
                     ->first();
 
-                    $sudahBayar    = $item->pembayaran_details?->sum('bayar');
+                    $sudahBayar    = $tagihanNew->pembayaran_details?->sum('bayar');
                     $totalTagihan += $tagihanNew->kurang();
                 @endphp
 

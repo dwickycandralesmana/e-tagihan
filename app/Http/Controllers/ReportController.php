@@ -98,7 +98,7 @@ class ReportController extends BaseController
         $this->tagihan = $tagihan;
         $this->tahun_ajaran = $tahunAjaran;
 
-        // return view('admin.report.export.kelas', $this->data);
+        return view('admin.report.export.kelas', $this->data);
 
         return Excel::download(new KelasExport($kelas, $tagihan, $tahunAjaran), $namaKelas . ' - ' . $tahunAjaran . '.xlsx');
     }
