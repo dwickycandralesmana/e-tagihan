@@ -84,7 +84,7 @@
                     ->where('tahun_ajaran', $item->tahun_ajaran)
                     ->first();
 
-                    $sudahBayar    = $tagihanNew->pembayaran_details?->sum('bayar');
+                    $sudahBayar    = $tagihanNew->pembayaran_details?->sum('jumlah');
                     $totalTagihan += $tagihanNew->kurang();
                 @endphp
 
@@ -101,7 +101,12 @@
                             <td>
                                 @php
                                     $tagihanPerBulan = $tagihanNew->sppPerBulan();
-                                    $sudahBayar      = $tagihanNew->pembayaran_details?->where('bulan', $bulan)->sum('bayar');
+
+                                    if($bulan == 7) {
+                                        $tagihanPerBulan = 0;
+                                    }
+
+                                    $sudahBayar      = $tagihanNew->pembayaran_details?->where('bulan', $bulan)->sum('jumlah');
 
                                     $sisaBayar = $tagihanPerBulan - $sudahBayar;
                                 @endphp
