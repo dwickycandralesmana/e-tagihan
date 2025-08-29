@@ -8,6 +8,7 @@
             @if($item->key == 'daftar_ulang')
                 <td rowspan="2">DU TOTAL</td>
                 <td rowspan="2">DU DIBAYAR</td>
+                <td rowspan="2">POTONGAN DU</td>
                 <td rowspan="2">KEKURANGAN DU</td>
             @elseif($item->key == 'tunggakan_kelas_x' || $item->key == 'tunggakan_kelas_xi')
                 <td colspan="2">{{ $item->nama }}</td>
@@ -85,13 +86,15 @@
                     ->first();
 
                     $sudahBayar    = $tagihanNew->pembayaran_details?->sum('jumlah');
+                    $bayarOnly     = $tagihanNew->pembayaran_details?->sum('bayar');
                     $totalTagihan += $tagihanNew->kurang();
                 @endphp
 
                 @if($tagihanData->key == 'daftar_ulang')
                     <td>{{ $tagihanNew->total }}</td>
-                    <td>{{ $sudahBayar }}</td>
-                    <td>{{ $tagihanNew->total - $sudahBayar }}</td>
+                    <td>{{ $bayarOnly }}</td>
+                    <td>{{ $tagihanNew->potongan }}</td>
+                    <td>{{ $tagihanNew->total - $bayarOnly - $tagihanNew->potongan }}</td>
                 @elseif($tagihanData->key == 'tunggakan_kelas_x' || $tagihanData->key == 'tunggakan_kelas_xi')
                 <td>{{ $tagihanNew->deskripsi }}</td>
                     <td>{{ $tagihanNew->kurang() }}</td>
@@ -102,7 +105,7 @@
                                 @php
                                     $tagihanPerBulan = $tagihanNew->sppPerBulan();
 
-                                    if($bulan == 7) {
+                                    if($bulan == 7 && $tagihanData->jenjang_id == 1) {
                                         $tagihanPerBulan = 0;
                                     }
 
