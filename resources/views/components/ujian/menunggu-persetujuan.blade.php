@@ -45,25 +45,25 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="nama">Nama</label>
                             <input type="text" class="form-control" id="nama" value="{{ $ujian->peserta->name }}" readonly>
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="nomor_ujian">Nomor Ujian</label>
                             <input type="text" class="form-control" id="nomor_ujian" value="{{ $ujian->nomor_ujian }}" readonly>
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="nama_ujian">Nama Ujian</label>
                             <input type="text" class="form-control" id="nama_ujian" value="{{ $ujian->kompetensi->nama }}" readonly>
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="durasi">Durasi</label>
                             <input type="text" class="form-control" id="durasi" value="{{ $ujian->kompetensi->durasi }} Menit" readonly>
                         </div>

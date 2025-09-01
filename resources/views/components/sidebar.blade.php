@@ -142,8 +142,10 @@
                         <span class="nav-link-title"> Laporan </span>
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{ route('laporan.siswa') }}" id="liLaporanSiswa"> Tagihan per Siswa </a>
+                        <a class="dropdown-item" href="{{ route('laporan.siswa') }}" id="liLaporanSiswa"> Pembayaran per Siswa </a>
                         <a class="dropdown-item" href="{{ route('laporan.kelas') }}" id="liLaporanKelas"> Tagihan per Kelas </a>
+                        <a class="dropdown-item" href="{{ route('laporan.potongan') }}" id="liLaporanPotongan"> Detail Potongan </a>
+                        <a class="dropdown-item" href="{{ route('laporan.pembayaran') }}" id="liLaporanPembayaran"> Detail Pembayaran </a>
                     </div>
                 </li>
                 @if($auth->type == 'admin')

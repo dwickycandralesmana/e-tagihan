@@ -33,4 +33,9 @@ class PembayaranDetail extends Model
 
         return $bulan . " " . $year;
     }
+
+    public function historyKelas()
+    {
+        return $this->belongsTo(HistoryKelas::class);
+    }
 }

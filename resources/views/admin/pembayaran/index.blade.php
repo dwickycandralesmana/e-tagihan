@@ -24,8 +24,8 @@ Pembayaran
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-4">
-                        <div class="form-group">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group mb-3">
                             <label for="tahun_ajaran" class="fw-bold">Tahun Pelajaran</label>
                             <select name="tahun_ajaran" id="tahun_ajaran" class="form-control select2">
                                 <option value="">-- Pilih Tahun Pelajaran --</option>
@@ -35,9 +35,9 @@ Pembayaran
                             </select>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="form-group">
-                            <label for="tanggal_pembayaran" class="fw-bold">Tanggal Pembayaran</label>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group mb-3">
+                            <label for="tanggal_pembayaran" class="fw-bold">Tanggal Transaksi</label>
                             <input type="text" name="tanggal_pembayaran" id="tanggal_pembayaran" class="form-control daterangepicer" value="{{ \Carbon\Carbon::now()->subDays(7)->format('d/m/Y') . ' - ' . \Carbon\Carbon::now()->format('d/m/Y') }}">
 
                             <button type="button" class="btn btn-primary mt-3 float-end" id="btnFilter">Filter</button>
@@ -49,7 +49,7 @@ Pembayaran
                                 <thead>
                                     <th>No</th>
                                     <th>Tahun Pelajaran</th>
-                                    <th>Tanggal Pembayaran</th>
+                                    <th>Tanggal Transaksi</th>
                                     <th>Jenjang</th>
                                     <th>Nama</th>
                                     <th>Detail Pembayaran</th>

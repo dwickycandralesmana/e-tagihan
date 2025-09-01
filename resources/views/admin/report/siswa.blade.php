@@ -24,8 +24,8 @@ Tagihan per Siswa
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-4">
-                        <div class="form-group">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group mb-3">
                             <label for="tahun_ajaran" class="fw-bold">Tahun Pelajaran</label>
                             <select name="tahun_ajaran" id="tahun_ajaran" class="form-control select2">
                                 <option value="">-- Pilih Tahun Pelajaran --</option>
@@ -35,8 +35,8 @@ Tagihan per Siswa
                             </select>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="form-group">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group mb-3">
                             <label for="kelas" class="fw-bold">Kelas</label>
                             <select name="kelas" id="kelas" class="form-control select2">
                                 <option value="">-- Semua Kelas --</option>
@@ -103,55 +103,6 @@ Tagihan per Siswa
 
         $(document).on('click','#btnFilter', function(){
             table.ajax.reload();
-        })
-
-        $(document).on('click','.btn-delete', function(){
-            id = $(this).attr('data-id');
-
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Ini akan menghapus semua data siswa yang terkait!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, saya yakin!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.value) {
-                    let url = '{{ route('siswa.destroy', ':id') }}';
-                        url = url.replace(':id', id);
-
-                    $.ajax({
-                        url : url,
-                        type : 'delete',
-                        data : {
-                            _token: '{{ csrf_token() }}',
-                        },
-                        success: function(response){
-                            if(response.status){
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: response.message
-                                });
-                            }else{
-                                Toast.fire({
-                                    icon: 'error',
-                                    title: response.message
-                                });
-                            }
-
-                            table.ajax.reload();
-                        },
-                        error: function(e){
-                            Toast.fire({
-                                icon: 'error',
-                                title: e.responseJSON.message
-                            });
-                        }
-                    });
-                }
-            })
         })
     });
 </script>

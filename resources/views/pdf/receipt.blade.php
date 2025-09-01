@@ -180,7 +180,7 @@
 								<td>{{ date('j F Y H:i', strtotime($order->created_at)) }}</td>
 							</tr>
 							<tr>
-								<td>Tanggal Pembayaran</td>
+								<td>Tanggal Transaksi</td>
 								<td>:</td>
 								<td>{{ date('j F Y H:i', strtotime($order->payment_date)) }}</td>
 								<td></td>

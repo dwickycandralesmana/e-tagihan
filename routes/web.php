@@ -46,6 +46,15 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
     Route::get('laporan/siswa', [ReportController::class, 'siswa'])->name('laporan.siswa');
     Route::get('laporan/siswa/{id}/export', [ReportController::class, 'siswaExport'])->name('laporan.siswa.export');
 
+    Route::get('laporan/jenis-pembayaran/data', [ReportController::class, 'jenisPembayaranData'])->name('laporan.jenis-pembayaran.data');
+
+    Route::get('laporan/pembayaran', [ReportController::class, 'pembayaran'])->name('laporan.pembayaran');
+    Route::get('laporan/pembayaran/export', [ReportController::class, 'pembayaranExport'])->name('laporan.pembayaran.export');
+
+    Route::get('laporan/potongan/data', [ReportController::class, 'potonganData'])->name('laporan.potongan.data');
+    Route::get('laporan/potongan', [ReportController::class, 'potongan'])->name('laporan.potongan');
+    Route::get('laporan/potongan/export', [ReportController::class, 'potonganExport'])->name('laporan.potongan.export');
+
     Route::get('laporan/kelas', [ReportController::class, 'kelas'])->name('laporan.kelas');
     Route::get('laporan/kelas/export', [ReportController::class, 'kelasExport'])->name('laporan.kelas.export');
 

@@ -23,7 +23,7 @@
         <td>No</td>
         <td>Nama Pembayaran</td>
         <td>Jumlah Pembayaran</td>
-        <td>Tanggal Pembayaran</td>
+        <td>Tanggal Transaksi</td>
         <td>Metode Pembayaran</td>
         <td>Yang Menerima</td>
     </tr>

@@ -29,8 +29,8 @@ Jenis Pembayaran
                             <i class="fa fa-plus"></i> Tambah Jenis Pembayaran
                         </a>
                     </div>
-                    <div class="col-4">
-                        <div class="form-group">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group mb-3">
                             <label for="tahun_ajaran" class="fw-bold">Tahun Pelajaran</label>
                             <select name="tahun_ajaran" id="tahun_ajaran" class="form-control select2">
                                 <option value="">-- Pilih Tahun Pelajaran --</option>
