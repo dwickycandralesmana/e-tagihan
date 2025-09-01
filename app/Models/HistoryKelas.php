@@ -9,6 +9,12 @@ class HistoryKelas extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'siswa_id',
+        'jenjang_id',
+        'tahun_ajaran',
+    ];
+
     public function siswa()
     {
         return $this->belongsTo(Siswa::class);
