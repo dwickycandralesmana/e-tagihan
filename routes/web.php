@@ -48,6 +48,7 @@ Route::middleware(['auth', IsAdmin::class])->group(function () {
 
     Route::get('laporan/jenis-pembayaran/data', [ReportController::class, 'jenisPembayaranData'])->name('laporan.jenis-pembayaran.data');
 
+    Route::get('laporan/pembayaran/data', [ReportController::class, 'pembayaranData'])->name('laporan.pembayaran.data');
     Route::get('laporan/pembayaran', [ReportController::class, 'pembayaran'])->name('laporan.pembayaran');
     Route::get('laporan/pembayaran/export', [ReportController::class, 'pembayaranExport'])->name('laporan.pembayaran.export');
 
