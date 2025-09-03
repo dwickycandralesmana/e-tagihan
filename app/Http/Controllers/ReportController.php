@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\KelasExport;
 use App\Exports\PembayaranExport;
 use App\Exports\PotonganExport;
+use App\Exports\RekapExport;
 use App\Exports\SiswaExport;
 use App\Models\HistoryKelas;
 use App\Models\Pembayaran;
@@ -352,5 +353,72 @@ class ReportController extends BaseController
         $fileName = date('YmdHis') . ' Pembayaran.xlsx';
 
         return Excel::download(new PembayaranExport($data), $fileName);
+    }
+
+    public function rekap(Request $request)
+    {
+        $this->bendahara = User::where('name', '!=', 'Admin')->get();
+
+        if (isset($request->tanggal_pembayaran)) {
+            $date = explode(" - ", $request->tanggal_pembayaran);
+            $startDate = Carbon::createFromFormat('d/m/Y', $date[0])->format('Y-m-d');
+            $endDate   = Carbon::createFromFormat('d/m/Y', $date[1])->format('Y-m-d');
+
+            $bendahara = $request->bendahara;
+
+            $detail = PembayaranDetail::query()
+                ->with('pembayaran', 'historyKelas', 'tagihanNew', 'pembayaran.siswa')
+                ->join('pembayarans', 'pembayaran_details.pembayaran_id', '=', 'pembayarans.id')
+                ->join('history_kelas', 'pembayaran_details.history_kelas_id', '=', 'history_kelas.id')
+                ->join('tagihan_news', 'pembayaran_details.tagihan_new_id', '=', 'tagihan_news.id')
+                ->join('tipe_tagihans', 'tagihan_news.tipe_tagihan_id', '=', 'tipe_tagihans.id')
+                ->join('siswas', 'history_kelas.siswa_id', '=', 'siswas.id')
+                ->join('users', 'pembayarans.created_by', '=', 'users.id')
+                ->select('pembayaran_details.*', 'siswas.nama', 'pembayarans.tanggal_pembayaran', 'history_kelas.kelas as nama_kelas', 'tipe_tagihans.nama as tipe_tagihan', 'users.name as created_by', 'tipe_tagihans.id as tipe_tagihan_id')
+                ->whereBetween('pembayarans.tanggal_pembayaran', [$startDate, $endDate])
+                ->orderBy('pembayarans.tanggal_pembayaran', 'asc');
+
+            if ($bendahara) {
+                $detail->where('pembayarans.created_by', $bendahara);
+            }
+
+            $detail = $detail->get();
+
+            $this->detail = $detail;
+        }
+
+        return view('admin.report.rekap', $this->data);
+    }
+
+    public function rekapExport(Request $request)
+    {
+
+        $date        = explode(" - ", $request->tanggal_pembayaran);
+        $startDate   = Carbon::createFromFormat('d/m/Y', $date[0])->format('Y-m-d');
+        $endDate     = Carbon::createFromFormat('d/m/Y', $date[1])->format('Y-m-d');
+        $bendahara   = $request->bendahara;
+
+
+        $detail = PembayaranDetail::query()
+            ->with('pembayaran', 'historyKelas', 'tagihanNew', 'pembayaran.siswa')
+            ->join('pembayarans', 'pembayaran_details.pembayaran_id', '=', 'pembayarans.id')
+            ->join('history_kelas', 'pembayaran_details.history_kelas_id', '=', 'history_kelas.id')
+            ->join('tagihan_news', 'pembayaran_details.tagihan_new_id', '=', 'tagihan_news.id')
+            ->join('tipe_tagihans', 'tagihan_news.tipe_tagihan_id', '=', 'tipe_tagihans.id')
+            ->join('siswas', 'history_kelas.siswa_id', '=', 'siswas.id')
+            ->join('users', 'pembayarans.created_by', '=', 'users.id')
+            ->select('pembayaran_details.*', 'siswas.nama', 'pembayarans.tanggal_pembayaran', 'history_kelas.kelas as nama_kelas', 'tipe_tagihans.nama as tipe_tagihan', 'users.name as created_by', 'tipe_tagihans.id as tipe_tagihan_id')
+            ->whereBetween('pembayarans.tanggal_pembayaran', [$startDate, $endDate])
+            ->orderBy('pembayarans.tanggal_pembayaran', 'asc');
+
+        if ($bendahara) {
+            $detail->where('pembayarans.created_by', $bendahara);
+        }
+
+        $detail = $detail->get();
+
+        $fileName = date('YmdHis') . ' Rekap.xlsx';
+
+        return Excel::download(new RekapExport($detail), $fileName);
     }
 }

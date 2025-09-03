@@ -146,6 +146,7 @@
                         <a class="dropdown-item" href="{{ route('laporan.kelas') }}" id="liLaporanKelas"> Tagihan per Kelas </a>
                         <a class="dropdown-item" href="{{ route('laporan.potongan') }}" id="liLaporanPotongan"> Detail Potongan </a>
                         <a class="dropdown-item" href="{{ route('laporan.pembayaran') }}" id="liLaporanPembayaran"> Detail Pembayaran </a>
+                        <a class="dropdown-item" href="{{ route('laporan.rekap') }}" id="liLaporanRekap"> Rekap per Petugas </a>
                     </div>
                 </li>
                 @if($auth->type == 'admin')
