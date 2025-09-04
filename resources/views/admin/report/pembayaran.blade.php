@@ -63,6 +63,16 @@ Detail Pembayaran
                         </div>
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group mb-3">
+                                <label for="metode_pembayaran" class="fw-bold">Metode Pembayaran</label>
+                                <select name="metode_pembayaran" id="metode_pembayaran" class="form-control select2">
+                                    <option value="">-- Semua Metode Pembayaran --</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Transfer">Transfer</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group mb-3">
                                 <label for="bendahara" class="fw-bold">Bendahara</label>
                                 <select name="bendahara" id="bendahara" class="form-control select2">
                                     <option value="">-- Semua Bendahara --</option>
@@ -85,6 +95,7 @@ Detail Pembayaran
                                         <th>Kelas</th>
                                         <th>Siswa</th>
                                         <th>Jenis Pembayaran</th>
+                                        <th>Metode Pembayaran</th>
                                         <th>Bayar</th>
                                         <th>Potongan</th>
                                         <th>Total</th>
@@ -143,6 +154,7 @@ Detail Pembayaran
                     d.jenis_pembayaran = $('#jenis_pembayaran').val();
                     d.tanggal_pembayaran = $('#tanggal_pembayaran').val();
                     d.bendahara = $('#bendahara').val();
+                    d.metode_pembayaran = $('#metode_pembayaran').val();
                 }
             },
             columns: [
@@ -152,6 +164,7 @@ Detail Pembayaran
                 {data: 'nama_kelas', name: 'history_kelas.kelas'},
                 {data: 'nama', name: 'nama'},
                 {data: 'tipe_tagihan', name: 'tipe_tagihans.nama'},
+                {data: 'metode_pembayaran', name: 'metode_pembayaran'},
                 {data: 'bayar', name: 'bayar'},
                 {data: 'potongan', name: 'potongan'},
                 {data: 'jumlah', name: 'jumlah'},

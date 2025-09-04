@@ -256,6 +256,7 @@ class ReportController extends BaseController
         $bendahara   = $request->bendahara;
         $tipeTagihan = $request->jenis_pembayaran;
         $tahunAjaran = $request->tahun_ajaran;
+        $metodePembayaran = $request->metode_pembayaran;
 
         $data = PembayaranDetail::query()
             ->join('pembayarans', 'pembayaran_details.pembayaran_id', '=', 'pembayarans.id')
@@ -264,7 +265,7 @@ class ReportController extends BaseController
             ->join('tipe_tagihans', 'tagihan_news.tipe_tagihan_id', '=', 'tipe_tagihans.id')
             ->join('siswas', 'history_kelas.siswa_id', '=', 'siswas.id')
             ->join('users', 'pembayarans.created_by', '=', 'users.id')
-            ->select('pembayaran_details.*', 'siswas.nama', 'pembayarans.tanggal_pembayaran', 'history_kelas.kelas as nama_kelas', 'tipe_tagihans.nama as tipe_tagihan', 'users.name as created_by')
+            ->select('pembayaran_details.*', 'siswas.nama', 'pembayarans.tanggal_pembayaran', 'history_kelas.kelas as nama_kelas', 'tipe_tagihans.nama as tipe_tagihan', 'users.name as created_by', 'pembayarans.metode_pembayaran')
             ->whereBetween('pembayarans.tanggal_pembayaran', [$startDate, $endDate])
             ->where('pembayaran_details.tahun_ajaran', $tahunAjaran);
 
@@ -278,6 +279,10 @@ class ReportController extends BaseController
 
         if ($tipeTagihan) {
             $data->where('tagihan_news.tipe_tagihan_id', $tipeTagihan);
+        }
+
+        if ($metodePembayaran) {
+            $data->where('pembayarans.metode_pembayaran', $metodePembayaran);
         }
 
         return DataTables::of($data)
@@ -317,13 +322,13 @@ class ReportController extends BaseController
 
     public function pembayaranExport(Request $request)
     {
-
-        $date        = explode(" - ", $request->tanggal_pembayaran);
-        $startDate   = Carbon::createFromFormat('d/m/Y', $date[0])->format('Y-m-d');
-        $endDate     = Carbon::createFromFormat('d/m/Y', $date[1])->format('Y-m-d');
-        $bendahara   = $request->bendahara;
-        $tipeTagihan = $request->jenis_pembayaran;
-        $tahunAjaran = $request->tahun_ajaran;
+        $date             = explode(" - ", $request->tanggal_pembayaran);
+        $startDate        = Carbon::createFromFormat('d/m/Y', $date[0])->format('Y-m-d');
+        $endDate          = Carbon::createFromFormat('d/m/Y', $date[1])->format('Y-m-d');
+        $bendahara        = $request->bendahara;
+        $tipeTagihan      = $request->jenis_pembayaran;
+        $tahunAjaran      = $request->tahun_ajaran;
+        $metodePembayaran = $request->metode_pembayaran;
 
         $data = PembayaranDetail::query()
             ->join('pembayarans', 'pembayaran_details.pembayaran_id', '=', 'pembayarans.id')
@@ -332,7 +337,7 @@ class ReportController extends BaseController
             ->join('tipe_tagihans', 'tagihan_news.tipe_tagihan_id', '=', 'tipe_tagihans.id')
             ->join('siswas', 'history_kelas.siswa_id', '=', 'siswas.id')
             ->join('users', 'pembayarans.created_by', '=', 'users.id')
-            ->select('pembayaran_details.*', 'siswas.nama', 'pembayarans.tanggal_pembayaran', 'history_kelas.kelas as nama_kelas', 'tipe_tagihans.nama as tipe_tagihan', 'users.name as created_by')
+            ->select('pembayaran_details.*', 'siswas.nama', 'pembayarans.tanggal_pembayaran', 'history_kelas.kelas as nama_kelas', 'tipe_tagihans.nama as tipe_tagihan', 'users.name as created_by', 'pembayarans.metode_pembayaran')
             ->whereBetween('pembayarans.tanggal_pembayaran', [$startDate, $endDate])
             ->where('pembayaran_details.tahun_ajaran', $tahunAjaran);
 
@@ -348,6 +353,10 @@ class ReportController extends BaseController
             $data->where('tagihan_news.tipe_tagihan_id', $tipeTagihan);
         }
 
+        if ($metodePembayaran) {
+            $data->where('pembayarans.metode_pembayaran', $metodePembayaran);
+        }
+
         $data = $data->get();
 
         $fileName = date('YmdHis') . ' Pembayaran.xlsx';
@@ -359,12 +368,17 @@ class ReportController extends BaseController
     {
         $this->bendahara = User::where('name', '!=', 'Admin')->get();
 
+        $this->startDate        = Carbon::now()->subDays(7)->format('d/m/Y');
+        $this->endDate          = Carbon::now()->format('d/m/Y');
+        $this->metodePembayaran = $request->metode_pembayaran;
+
         if (isset($request->tanggal_pembayaran)) {
             $date = explode(" - ", $request->tanggal_pembayaran);
             $startDate = Carbon::createFromFormat('d/m/Y', $date[0])->format('Y-m-d');
             $endDate   = Carbon::createFromFormat('d/m/Y', $date[1])->format('Y-m-d');
 
-            $bendahara = $request->bendahara;
+            $bendahara        = $request->bendahara;
+            $metodePembayaran = $request->metode_pembayaran;
 
             $detail = PembayaranDetail::query()
                 ->with('pembayaran', 'historyKelas', 'tagihanNew', 'pembayaran.siswa')
@@ -374,7 +388,7 @@ class ReportController extends BaseController
                 ->join('tipe_tagihans', 'tagihan_news.tipe_tagihan_id', '=', 'tipe_tagihans.id')
                 ->join('siswas', 'history_kelas.siswa_id', '=', 'siswas.id')
                 ->join('users', 'pembayarans.created_by', '=', 'users.id')
-                ->select('pembayaran_details.*', 'siswas.nama', 'pembayarans.tanggal_pembayaran', 'history_kelas.kelas as nama_kelas', 'tipe_tagihans.nama as tipe_tagihan', 'users.name as created_by', 'tipe_tagihans.id as tipe_tagihan_id')
+                ->select('pembayaran_details.*', 'siswas.nama', 'pembayarans.tanggal_pembayaran', 'history_kelas.kelas as nama_kelas', 'tipe_tagihans.nama as tipe_tagihan', 'users.name as created_by', 'tipe_tagihans.id as tipe_tagihan_id', 'pembayarans.metode_pembayaran')
                 ->whereBetween('pembayarans.tanggal_pembayaran', [$startDate, $endDate])
                 ->orderBy('pembayarans.tanggal_pembayaran', 'asc');
 
@@ -382,9 +396,15 @@ class ReportController extends BaseController
                 $detail->where('pembayarans.created_by', $bendahara);
             }
 
+            if ($metodePembayaran) {
+                $detail->where('pembayarans.metode_pembayaran', $metodePembayaran);
+            }
+
             $detail = $detail->get();
 
             $this->detail = $detail;
+            $this->startDate = Carbon::createFromFormat('Y-m-d', $startDate)->format('d/m/Y');
+            $this->endDate = Carbon::createFromFormat('Y-m-d', $endDate)->format('d/m/Y');
         }
 
         return view('admin.report.rekap', $this->data);
@@ -397,7 +417,7 @@ class ReportController extends BaseController
         $startDate   = Carbon::createFromFormat('d/m/Y', $date[0])->format('Y-m-d');
         $endDate     = Carbon::createFromFormat('d/m/Y', $date[1])->format('Y-m-d');
         $bendahara   = $request->bendahara;
-
+        $metodePembayaran = $request->metode_pembayaran;
 
         $detail = PembayaranDetail::query()
             ->with('pembayaran', 'historyKelas', 'tagihanNew', 'pembayaran.siswa')
@@ -407,12 +427,16 @@ class ReportController extends BaseController
             ->join('tipe_tagihans', 'tagihan_news.tipe_tagihan_id', '=', 'tipe_tagihans.id')
             ->join('siswas', 'history_kelas.siswa_id', '=', 'siswas.id')
             ->join('users', 'pembayarans.created_by', '=', 'users.id')
-            ->select('pembayaran_details.*', 'siswas.nama', 'pembayarans.tanggal_pembayaran', 'history_kelas.kelas as nama_kelas', 'tipe_tagihans.nama as tipe_tagihan', 'users.name as created_by', 'tipe_tagihans.id as tipe_tagihan_id')
+            ->select('pembayaran_details.*', 'siswas.nama', 'pembayarans.tanggal_pembayaran', 'history_kelas.kelas as nama_kelas', 'tipe_tagihans.nama as tipe_tagihan', 'users.name as created_by', 'tipe_tagihans.id as tipe_tagihan_id', 'pembayarans.metode_pembayaran')
             ->whereBetween('pembayarans.tanggal_pembayaran', [$startDate, $endDate])
             ->orderBy('pembayarans.tanggal_pembayaran', 'asc');
 
         if ($bendahara) {
             $detail->where('pembayarans.created_by', $bendahara);
+        }
+
+        if ($metodePembayaran) {
+            $detail->where('pembayarans.metode_pembayaran', $metodePembayaran);
         }
 
         $detail = $detail->get();

@@ -28,7 +28,17 @@ Rekap Petugas
                         <div class="col-md-3 col-sm-12">
                             <div class="form-group mb-3">
                                 <label for="tanggal_pembayaran" class="fw-bold">Periode</label>
-                                <input type="text" name="tanggal_pembayaran" id="tanggal_pembayaran" class="form-control daterangepicer" value="{{ \Carbon\Carbon::now()->subDays(7)->format('d/m/Y') . ' - ' . \Carbon\Carbon::now()->format('d/m/Y') }}">
+                                <input type="text" name="tanggal_pembayaran" id="tanggal_pembayaran" class="form-control daterangepicer" value="{{ $startDate . ' - ' . $endDate }}">
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group mb-3">
+                                <label for="metode_pembayaran" class="fw-bold">Metode Pembayaran</label>
+                                <select name="metode_pembayaran" id="metode_pembayaran" class="form-control select2">
+                                    <option value="" @selected($metodePembayaran == '')>-- Semua Metode Pembayaran --</option>
+                                    <option value="Cash" @selected($metodePembayaran == 'Cash')>Cash</option>
+                                    <option value="Transfer" @selected($metodePembayaran == 'Transfer')>Transfer</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-3 col-sm-12">
@@ -59,6 +69,7 @@ Rekap Petugas
                                             <th>Nama Siswa</th>
                                             <th>Kelas</th>
                                             <th>Nama Pembayaran</th>
+                                            <th>Metode Pembayaran</th>
                                             <th>Jumlah</th>
                                         </tr>
                                     </thead>
@@ -71,11 +82,12 @@ Rekap Petugas
                                                 <td>{{ $item->pembayaran->siswa->nama }}</td>
                                                 <td>{{ $item->historyKelas->kelas }}</td>
                                                 <td>{{ $item->tipe_tagihan . ' ' . $item->bulan_text }}</td>
+                                                <td>{{ $item->metode_pembayaran }}</td>
                                                 <td>{{ formatRp($item->bayar) }}</td>
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="7" class="text-center">Data Tidak Ditemukan</td>
+                                                <td colspan="8" class="text-center">Data Tidak Ditemukan</td>
                                             </tr>
                                         @endforelse
 
@@ -86,12 +98,12 @@ Rekap Petugas
 
                                             @foreach($groupedByTagihan as $tagihan)
                                                 <tr>
-                                                    <td colspan="6" class="text-end">{{ $tagihan->first()->tipe_tagihan }}</td>
+                                                    <td colspan="7" class="text-end">{{ $tagihan->first()->tipe_tagihan }}</td>
                                                     <td>{{ formatRp($tagihan->sum('bayar')) }}</td>
                                                 </tr>
                                             @endforeach
                                             <tr>
-                                                <td colspan="6" class="text-end">Total</td>
+                                                <td colspan="7" class="text-end">Total</td>
                                                 <td>{{ formatRp($detail->sum('bayar')) }}</td>
                                             </tr>
                                         @endif

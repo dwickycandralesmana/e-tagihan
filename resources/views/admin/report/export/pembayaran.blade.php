@@ -7,6 +7,7 @@
             <th>Kelas</th>
             <th>Siswa</th>
             <th>Jenis Pembayaran</th>
+            <th>Metode Pembayaran</th>
             <th>Bayar</th>
             <th>Potongan</th>
             <th>Total</th>
@@ -22,6 +23,7 @@
                 <td>{{ $item->nama_kelas }}</td>
                 <td>{{ $item->nama }}</td>
                 <td>{{ $item->tipe_tagihan }} {{ $item->bulan_text }}</td>
+                <td>{{ $item->metode_pembayaran }}</td>
                 <td>{{ $item->bayar }}</td>
                 <td>{{ $item->potongan }}</td>
                 <td>{{ $item->jumlah }}</td>

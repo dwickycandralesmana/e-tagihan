@@ -8,6 +8,7 @@
             <th>Nama Siswa</th>
             <th>Kelas</th>
             <th>Nama Pembayaran</th>
+            <th>Metode Pembayaran</th>
             <th>Jumlah</th>
         </tr>
     </thead>
@@ -20,11 +21,12 @@
                 <td>{{ $item->pembayaran->siswa->nama }}</td>
                 <td>{{ $item->historyKelas->kelas }}</td>
                 <td>{{ $item->tipe_tagihan . ' ' . $item->bulan_text }}</td>
+                <td>{{ $item->metode_pembayaran }}</td>
                 <td>{{ $item->bayar }}</td>
             </tr>
         @empty
             <tr>
-                <td colspan="7" class="text-center">Data Tidak Ditemukan</td>
+                <td colspan="8" class="text-center">Data Tidak Ditemukan</td>
             </tr>
         @endforelse
 
@@ -35,12 +37,12 @@
 
             @foreach($groupedByTagihan as $tagihan)
                 <tr>
-                    <td colspan="6" class="text-end">{{ $tagihan->first()->tipe_tagihan }}</td>
+                    <td colspan="7" class="text-end">{{ $tagihan->first()->tipe_tagihan }}</td>
                     <td>{{ $tagihan->sum('bayar') }}</td>
                 </tr>
             @endforeach
             <tr>
-                <td colspan="6" class="text-end">Total</td>
+                <td colspan="7" class="text-end">Total</td>
                 <td>{{ $detail->sum('bayar') }}</td>
             </tr>
         @endif
