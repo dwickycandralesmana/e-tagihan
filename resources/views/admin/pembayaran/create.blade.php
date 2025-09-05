@@ -508,38 +508,51 @@ Tambah Pembayaran
            return false;
        }
 
-       $.ajax({
-           url: "{{ route('pembayaran.store') }}",
-           method: "POST",
-           data: $('#formPembayaran').serialize(),
-           success: function(response) {
-               console.log(response);
+       Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian',
+            text: 'Apakah anda yakin ingin menyimpan pembayaran ini?',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{ route('pembayaran.store') }}",
+                    method: "POST",
+                    data: $('#formPembayaran').serialize(),
+                    success: function(response) {
+                        console.log(response);
 
-               Swal.fire({
-                   icon: 'success',
-                   title: 'Berhasil',
-                   text: 'Pembayaran berhasil! Ingin unduh bukti pembayaran?',
-                   showCancelButton: true,
-                   confirmButtonText: 'Ya',
-                   cancelButtonText: 'Tidak',
-               }).then((result) => {
-                   if (result.isConfirmed) {
-                       window.location.href = response.url;
-                   }else{
-                       window.location.href = "{{ route('pembayaran.index') }}";
-                   }
-               });
-           },
-           error: function(xhr) {
-               Swal.fire({
-                   icon: 'error',
-                   title: 'Gagal',
-                   text: xhr.responseJSON.message,
-               });
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Pembayaran berhasil! Ingin unduh bukti pembayaran?',
+                            showCancelButton: true,
+                            confirmButtonText: 'Ya',
+                            cancelButtonText: 'Tidak',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = response.url;
+                            }else{
+                                window.location.href = "{{ route('pembayaran.index') }}";
+                            }
+                        });
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: xhr.responseJSON.message,
+                        });
 
-               $(this).prop('disabled', false);
-           }
-       });
+                        $(this).prop('disabled', false);
+                    }
+                });
+            }else{
+                $(this).prop('disabled', false);
+            }
+        });
     });
 </script>
 @endsection
